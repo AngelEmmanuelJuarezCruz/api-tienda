@@ -3,7 +3,7 @@
 Objetivo 1
 Diseñar el Diagrama ERD completo del sistema
 Qué debe entregar exactamente:
-
+--warp opensource
 Diagrama con las 9 tablas del negocio (listadas arriba en la sección de modelos)
 Relaciones correctas dibujadas: qué tabla tiene llaves foráneas de cuál
 Indicar qué campos son obligatorios, cuáles opcionales y los tipos de dato

@@ -7,6 +7,24 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## API Tienda - Entrega de Base de Datos Avanzadas
+
+Esta rama incluye una propuesta de Producto Integrador con:
+
+1. Base de datos activa en SQLite para la app principal.
+2. Reporte tecnico alineado a la rubrica de evaluacion.
+
+### Archivos clave
+
+1. `database/migrations/2026_04_25_000100_create_active_database_artifacts.php`
+
+### Comandos de prueba rapida
+
+```bash
+php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"
+php artisan migrate
+```
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
