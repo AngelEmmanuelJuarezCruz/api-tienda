@@ -76,4 +76,57 @@ class Producto extends Model
     {
         return $this->hasMany(BitacoraMovimientoStock::class);
     }
+
+    // ========== SCOPES ÚTILES PARA FILTROS ==========
+
+    /**
+     * Filtrar productos con stock bajo (por debajo del mínimo)
+     */
+    public function scopeStockBajo($query)
+    {
+        return $query->whereColumn('stock_actual', '<', 'stock_minimo');
+    }
+
+    /**
+     * Filtrar productos activos solamente
+     */
+    public function scopeActivos($query)
+    {
+        return $query->where('activo', true);
+    }
+
+    /**
+     * Filtrar por categoría
+     */
+    public function scopePorCategoria($query, $categoriaId)
+    {
+        return $query->where('categoria_id', $categoriaId);
+    }
+
+    /**
+     * Filtrar por proveedor
+     */
+    public function scopePorProveedor($query, $proveedorId)
+    {
+        return $query->where('proveedor_id', $proveedorId);
+    }
+
+    /**
+     * Filtrar productos con fecha de caducidad (próximos 7 días)
+     */
+    public function scopeProximosACaducar($query, $dias = 7)
+    {
+        $fecha = now()->addDays($dias);
+        return $query->where('tiene_caducidad', true)
+                    ->whereNotNull('fecha_caducidad')
+                    ->whereBetween('fecha_caducidad', [now(), $fecha]);
+    }
+
+    /**
+     * Productos ordenados por stock bajo (descendente)
+     */
+    public function scopeOrdenadosPorStock($query)
+    {
+        return $query->orderBy('stock_actual', 'asc');
+    }
 }
