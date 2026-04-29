@@ -47,6 +47,7 @@ php artisan key:generate
 Este paso crea tu propia copia de la BD con tablas y datos de prueba:
 
 ```bash
+php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"
 php artisan migrate:seed --force
 ```
 
@@ -87,11 +88,11 @@ Si ves los números correctos, ¡todo OK! ✅
 
 | Email | Contraseña | Rol |
 |-------|-----------|-----|
-| dueno@tienda.test | password | Dueño |
-| encargado@tienda.test | password | Encargado |
-| cajero@tienda.test | password | Cajero |
+| dueno@apitienda.local | password123 | Dueno |
+| encargado@apitienda.local | password123 | Encargado |
+| cajero@apitienda.local | password123 | Cajero |
 
-*(Ajusta según el seeder actual)*
+*(Actualizado según el seeder actual)*
 
 ---
 

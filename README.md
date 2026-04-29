@@ -25,6 +25,8 @@ php -r "file_exists('database/database.sqlite') || touch('database/database.sqli
 php artisan migrate
 ```
 
+Nota: no hagas commit del archivo `database/database.sqlite`; cada equipo genera su propia BD local.
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:

@@ -26,7 +26,7 @@ class AuthController extends Controller
             $user = Auth::user();
 
             // Redirección post-login según el rol
-            if (in_array($user->rol, ['dueño', 'administrador'])) {
+            if (in_array($user->rol, ['dueno', 'administrador'])) {
                 return redirect()->intended('/admin');
             } elseif ($user->rol === 'encargado') {
                 return redirect()->intended('/almacen');

@@ -24,7 +24,7 @@
                 <p class="text-sm text-gray-500">Sistema Integral de Ventas y Gestión de Inventarios</p>
             </header>
             
-            <form id="loginForm" method="POST" action="{{ route('login') }}" novalidate>
+            <form id="loginForm" method="POST" action="{{ route('login.post') }}" novalidate>
                 @csrf
 
                 {{-- Email --}}
