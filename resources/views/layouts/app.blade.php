@@ -135,6 +135,27 @@
                         </a>
                         @endif
 
+                        {{-- Productos - visible para dueño/encargado/administrador --}}
+                        @if(in_array($role, ['dueno','encargado','administrador']))
+                        <a href="{{ route('almacen.productos') }}" class="nav-item {{ request()->routeIs('almacen.productos*') ? 'active' : '' }}">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18v11a2 2 0 01-2 2H5a2 2 0 01-2-2zM16 3v4M8 3v4"/></svg>
+                            <span class="ml-2 text-white">Productos</span>
+                        </a>
+                        @endif
+
+                        {{-- Entradas y Salidas - sólo dueño y encargado --}}
+                        @if(in_array($role, ['dueno','encargado']))
+                        <a href="{{ route('almacen.entradas') }}" class="nav-item {{ request()->routeIs('almacen.entradas*') ? 'active' : '' }}">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v12m8-6l-4 4-4-4"/></svg>
+                            <span class="ml-2 text-white">Entradas</span>
+                        </a>
+
+                        <a href="{{ route('almacen.salidas') }}" class="nav-item {{ request()->routeIs('almacen.salidas*') ? 'active' : '' }}">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22V10m-8 6l4-4 4 4"/></svg>
+                            <span class="ml-2 text-white">Salidas</span>
+                        </a>
+                        @endif
+
                         @if(in_array($role, ['dueno','administrador']))
                         <a href="{{ route('admin.ventas.index') }}" class="nav-item {{ request()->routeIs('admin.ventas.*') ? 'active' : '' }}">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18v4H3zM3 7v11a2 2 0 002 2h14a2 2 0 002-2V7"/></svg>
