@@ -12,7 +12,7 @@
     <div class="max-w-7xl mx-auto">
         <h1 class="text-2xl font-semibold text-gray-800 mb-6" style="font-family: 'Poppins', sans-serif;">Gestión de Insumos Médicos</h1>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="metric-grid mb-6">
             <!-- Ventas del día -->
             <div class="bg-blue-50 shadow-sm rounded-lg p-4 flex items-center space-x-4 border-l-4 border-[#1E3A8A]">
                 <div class="w-12 h-12 rounded-full flex items-center justify-center bg-[#1E3A8A]/10">
@@ -63,7 +63,7 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 bg-white rounded-lg p-6 border-dashed border-2 border-gray-200">
+            <div class="panel-white lg:col-span-2">
                 <h2 class="text-lg font-medium text-gray-800 mb-3">Ventas de los últimos 7 días</h2>
                 <div class="w-full h-64 flex items-end gap-3 px-4">
                     <!-- 7 barras estáticas con diferentes alturas -->
@@ -98,7 +98,7 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-lg p-6">
+            <div class="panel-white">
                 <h2 class="text-lg font-medium text-gray-800 mb-3">Productos más vendidos</h2>
                 <ul class="space-y-3 text-gray-700">
                     <li class="flex justify-between items-center">
