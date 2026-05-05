@@ -3,7 +3,7 @@
 @section('title','Registrar Entrada')
 
 @section('content')
-<div class="max-w-4xl mx-auto p-6 bg-white rounded shadow">
+<div class="max-w-4xl mx-auto panel-white p-6">
     <h2 class="text-xl font-bold mb-4">Registrar Entrada de Inventario</h2>
 
     @if(session('success'))<div class="alert-success mb-4">{{ session('success') }}</div>@endif
