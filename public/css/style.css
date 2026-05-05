@@ -1,0 +1,27 @@
+/* Project palette: Azul Profesional (#1E3A8A), Verde Salud (#108981) */
+:root{
+  --azul:#1E3A8A;
+  --verde:#108981;
+  --bg:#F2F4F7;
+}
+body{background:var(--bg);font-family:Poppins, sans-serif;color:#1f2937}
+/* Topbar */
+.floating-topbar{background:#fff;border-radius:9999px;padding:.5rem 1rem;box-shadow:0 8px 20px rgba(2,6,23,0.06)}
+/* Sidebar */
+#sidebar{background:var(--azul);padding:1rem;color:#fff}
+#sidebar .nav-item{display:flex;align-items:center;gap:.5rem;padding:.5rem;border-radius:.375rem}
+#sidebar .nav-item:hover{background:rgba(255,255,255,0.06)}
+#sidebar .nav-item.active{background:rgba(255,255,255,0.12)}
+/* Buttons */
+.btn-primary{background:var(--azul);color:#fff;padding:.5rem 1rem;border-radius:.375rem;border:none}
+.btn-secondary{background:var(--verde);color:#fff;padding:.5rem 1rem;border-radius:.375rem;border:none}
+/* Forms */
+.form-input{width:100%;padding:.5rem;border:1px solid #e5e7eb;border-radius:.375rem;background:#fff}
+.form-label{display:block;margin-bottom:.25rem;font-weight:600}
+.form-group{margin-bottom:1rem}
+/* Tables */
+.table{width:100%;border-collapse:collapse;background:#fff;border-radius:.5rem;overflow:hidden}
+.table th,.table td{padding:.75rem;border-bottom:1px solid #eef2f7;text-align:left}
+.table thead th{background:#f9fafb;color:#374151;font-weight:600}
+.alert-success{background:#ecfdf5;color:#065f46;padding:.5rem 1rem;border-radius:.375rem}
+.alert-error{background:#fef2f2;color:#991b1b;padding:.5rem 1rem;border-radius:.375rem}

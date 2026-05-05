@@ -24,15 +24,15 @@ class AuthController extends Controller
             $role = strtolower($user->rol ?? '');
 
             if (in_array($role, ['dueno', 'dueño', 'administrador'])) {
-                return redirect()->intended('/admin');
+                return redirect()->route('admin.index');
             }
 
             if ($role === 'encargado') {
-                return redirect()->intended('/almacen');
+                return redirect()->route('encargado.dashboard');
             }
 
             if ($role === 'cajero') {
-                return redirect()->intended('/ventas');
+                return redirect()->route('cajero.dashboard');
             }
 
             return redirect()->intended('/');
