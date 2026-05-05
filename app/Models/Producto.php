@@ -18,6 +18,8 @@ class Producto extends Model
         'proveedor_id',
         'nombre',
         'sku',
+        'codigo_barras',
+        'unidad_medida',
         'descripcion',
         'precio_compra',
         'precio_venta',
