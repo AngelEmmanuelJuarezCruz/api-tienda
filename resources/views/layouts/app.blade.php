@@ -6,66 +6,8 @@
     <title>Gestión de Insumos Médicos</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style>
-        /* Sidebar (fixed column) */
-        #sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 16rem; /* 64 */
-            background: #1E3A8A;
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-            z-index: 30;
-        }
-
-        /* Main content is pushed by the sidebar width */
-        .main-content { margin-left: 16rem; transition: all 0.3s ease; }
-
-        /* Collapsed sidebar: narrow and keep content margin in sync (w-20 = 5rem) */
-        .sidebar-collapsed #sidebar { width: 5rem; }
-        .sidebar-collapsed .main-content { margin-left: 5rem; }
-
-        /* Nav spacing and styles */
-        #sidebar nav { display: flex; flex-direction: column; }
-        #sidebar .nav-items { display: flex; flex-direction: column; gap: 1.5rem; } /* space-y-6 equivalent */
-        #sidebar .nav-item { color: rgba(255,255,255,0.95); display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; transition: background 0.18s ease; }
-        #sidebar .nav-item svg { color: rgba(255,255,255,0.95); }
-        #sidebar .nav-item:hover { background: rgba(255,255,255,0.06); border-radius: 0.5rem; }
-        #sidebar .nav-item.active { background: rgba(255,255,255,0.12); border-radius: 9999px; }
-
-        /* When collapsed hide labels to keep compact */
-        .sidebar-collapsed #sidebar h1 { display: none; }
-        .sidebar-collapsed #sidebar .nav-item span { display: none; }
-
-        /* Center icons and increase size when collapsed */
-        .sidebar-collapsed #sidebar .nav-item { justify-content: center; }
-        .sidebar-collapsed #sidebar .nav-item svg { width: 1.5rem; height: 1.5rem; }
-        /* Keep vertical spacing when collapsed */
-        .sidebar-collapsed #sidebar .nav-items { gap: 1.5rem; }
-
-        /* Username and small UI tweaks */
-        .user-badge { color: #1E3A8A; }
-
-        /* Topbar look */
-        .floating-topbar {
-            background: #F2F4F7;
-            border-radius: 9999px;
-            padding: 0.5rem 1rem;
-            box-shadow: 0 8px 20px rgba(2,6,23,0.06);
-        }
-
-        @media (max-width: 767px) {
-            #sidebar { position: relative; width: 100%; height: auto; }
-            .main-content { margin-left: 0; }
-        }
-    </style>
 </head>
-<body style="background: #F2F4F7; font-family: 'Poppins', sans-serif;">
+<body>
 
     <div class="flex min-h-screen">
 
@@ -83,10 +25,10 @@
                     @auth
                         @php $topRole = strtolower(Auth::user()->rol ?? ''); @endphp
                         @if($topRole === 'cajero')
-                            <a href="{{ route('cajero.dashboard') }}" class="text-xl font-bold text-gray-800" style="font-family: 'Poppins', sans-serif;">Gestión de Insumos Médicos</a>
-                        @else
-                            <a href="{{ route('admin.index') }}" class="text-xl font-bold text-gray-800" style="font-family: 'Poppins', sans-serif;">Gestión de Insumos Médicos</a>
-                        @endif
+                                <a href="{{ route('cajero.dashboard') }}" class="text-xl font-bold text-gray-800">Gestión de Insumos Médicos</a>
+                            @else
+                                <a href="{{ route('admin.index') }}" class="text-xl font-bold text-gray-800">Gestión de Insumos Médicos</a>
+                            @endif
                     @else
                         <a href="{{ route('admin.index') }}" class="text-xl font-bold text-gray-800" style="font-family: 'Poppins', sans-serif;">Gestión de Insumos Médicos</a>
                     @endauth
@@ -107,9 +49,9 @@
 
             {{-- SIDEBAR (fixed, pushes content) --}}
             <aside id="sidebar">
-                <a href="{{ route('admin.index') }}" class="flex items-center gap-3 mb-6">
+                        <a href="{{ route('admin.index') }}" class="flex items-center gap-3 mb-6">
                     <svg width="32" height="32" class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7l9-4 9 4v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-                    <h1 class="text-lg font-bold text-white" style="font-family: 'Poppins', sans-serif;">Gestión de Insumos Médicos</h1>
+                    <h1 class="text-lg font-bold text-white">Gestión de Insumos Médicos</h1>
                 </a>
 
                 <nav class="nav-items">
