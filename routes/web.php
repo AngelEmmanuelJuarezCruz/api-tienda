@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AlmacenController;
 
 Route::get('/', function () {
     return redirect()->route('login.form');
@@ -30,6 +31,13 @@ Route::middleware(['auth', 'role:encargado'])->prefix('almacen')->group(function
 
     Route::get('/dashboard', [DashboardController::class, 'almacen'])->name('almacen.dashboard');
     Route::get('/productos', [DashboardController::class, 'productos'])->name('almacen.productos');
+    
+    Route::post('/productos', [AlmacenController::class, 'store'])->name('almacen.productos.store');
+    Route::put('/productos/{producto}', [AlmacenController::class, 'update'])->name('almacen.productos.update');
+    Route::delete('/productos/{producto}', [AlmacenController::class, 'destroy'])->name('almacen.productos.destroy');
+
+    Route::post('/entradas', [\App\Http\Controllers\EntradasController::class, 'store'])->name('almacen.entradas.store');
+    Route::post('/salidas', [\App\Http\Controllers\SalidasController::class, 'store'])->name('almacen.salidas.store');
 });
 
 Route::middleware(['auth', 'role:cajero'])->prefix('ventas')->group(function () {
@@ -38,4 +46,5 @@ Route::middleware(['auth', 'role:cajero'])->prefix('ventas')->group(function () 
     });
 
     Route::get('/dashboard', [DashboardController::class, 'ventas'])->name('ventas.dashboard');
+    Route::post('/registrar', [App\Http\Controllers\VentasController::class, 'store'])->name('ventas.store');
 });
