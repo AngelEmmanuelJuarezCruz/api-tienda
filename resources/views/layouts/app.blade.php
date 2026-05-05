@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Insumos Médicos</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         /* Sidebar (fixed column) */
         #sidebar {
@@ -78,7 +78,7 @@
             <div class="flex items-center justify-between mb-6 floating-topbar">
                 <div class="flex items-center gap-4">
                     <button id="sidebar-toggle" onclick="toggleSidebar()" class="p-2 rounded-md bg-white/90 text-[#1E3A8A] focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                        <svg width="24" height="24" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
                     @auth
                         @php $topRole = strtolower(Auth::user()->rol ?? ''); @endphp
@@ -108,7 +108,7 @@
             {{-- SIDEBAR (fixed, pushes content) --}}
             <aside id="sidebar">
                 <a href="{{ route('admin.index') }}" class="flex items-center gap-3 mb-6">
-                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7l9-4 9 4v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+                    <svg width="32" height="32" class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7l9-4 9 4v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
                     <h1 class="text-lg font-bold text-white" style="font-family: 'Poppins', sans-serif;">Gestión de Insumos Médicos</h1>
                 </a>
 
@@ -118,19 +118,19 @@
 
                         @if($role === 'cajero')
                         <a href="{{ route('cajero.dashboard') }}" class="nav-item {{ request()->routeIs('cajero.*') ? 'active' : '' }}">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6"/></svg>
+                            <svg width="20" height="20" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6"/></svg>
                             <span class="ml-2 text-white">Panel</span>
                         </a>
                         @else
                         <a href="{{ route('admin.index') }}" class="nav-item {{ request()->routeIs('admin.index') ? 'active' : '' }}">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6"/></svg>
+                            <svg width="20" height="20" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6"/></svg>
                             <span class="ml-2 text-white">Panel</span>
                         </a>
                         @endif
 
                         @if(in_array($role, ['dueno','encargado','administrador']))
                         <a href="{{ route('admin.almacen.index') }}" class="nav-item {{ request()->routeIs('admin.almacen.*') ? 'active' : '' }}">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 7l3 13h12l3-13"/></svg>
+                            <svg width="20" height="20" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 7l3 13h12l3-13"/></svg>
                             <span class="ml-2 text-white">Almacén</span>
                         </a>
                         @endif
@@ -138,49 +138,53 @@
                         {{-- Productos - visible para dueño/encargado/administrador --}}
                         @if(in_array($role, ['dueno','encargado','administrador']))
                         <a href="{{ route('almacen.productos') }}" class="nav-item {{ request()->routeIs('almacen.productos*') ? 'active' : '' }}">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18v11a2 2 0 01-2 2H5a2 2 0 01-2-2zM16 3v4M8 3v4"/></svg>
+                            <svg width="20" height="20" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18v11a2 2 0 01-2 2H5a2 2 0 01-2-2zM16 3v4M8 3v4"/></svg>
                             <span class="ml-2 text-white">Productos</span>
                         </a>
                         @endif
+                            <a href="{{ route('almacen.productos.create') }}" class="nav-item {{ request()->routeIs('almacen.productos.create') ? 'active' : '' }}">
+                                <svg width="20" height="20" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                <span class="ml-2 text-white">Crear Producto</span>
+                            </a>
 
                         {{-- Entradas y Salidas - sólo dueño y encargado --}}
                         @if(in_array($role, ['dueno','encargado']))
                         <a href="{{ route('almacen.entradas') }}" class="nav-item {{ request()->routeIs('almacen.entradas*') ? 'active' : '' }}">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v12m8-6l-4 4-4-4"/></svg>
+                            <svg width="20" height="20" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v12m8-6l-4 4-4-4"/></svg>
                             <span class="ml-2 text-white">Entradas</span>
                         </a>
 
                         <a href="{{ route('almacen.salidas') }}" class="nav-item {{ request()->routeIs('almacen.salidas*') ? 'active' : '' }}">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22V10m-8 6l4-4 4 4"/></svg>
+                            <svg width="20" height="20" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22V10m-8 6l4-4 4 4"/></svg>
                             <span class="ml-2 text-white">Salidas</span>
                         </a>
                         @endif
 
                         @if(in_array($role, ['dueno','administrador']))
                         <a href="{{ route('admin.ventas.index') }}" class="nav-item {{ request()->routeIs('admin.ventas.*') ? 'active' : '' }}">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18v4H3zM3 7v11a2 2 0 002 2h14a2 2 0 002-2V7"/></svg>
+                            <svg width="20" height="20" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18v4H3zM3 7v11a2 2 0 002 2h14a2 2 0 002-2V7"/></svg>
                             <span class="ml-2 text-white">Ventas</span>
                         </a>
                         @elseif($role === 'cajero')
                         <a href="{{ route('cajero.ventas.index') }}" class="nav-item {{ request()->routeIs('cajero.ventas.*') ? 'active' : '' }}">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18v4H3zM3 7v11a2 2 0 002 2h14a2 2 0 002-2V7"/></svg>
+                            <svg width="20" height="20" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18v4H3zM3 7v11a2 2 0 002 2h14a2 2 0 002-2V7"/></svg>
                             <span class="ml-2 text-white">Ventas</span>
                         </a>
                         @endif
 
                         @if(in_array($role, ['dueno','administrador']))
                         <a href="{{ route('admin.proveedores.index') }}" class="nav-item {{ request()->routeIs('admin.proveedores.*') ? 'active' : '' }}">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zm10 0a2 2 0 11-4 0 2 2 0 014 0zM13 16V8a1 1 0 00-1-1H3v9h1a1 1 0 011 1v1h12v-2a1 1 0 011-1h1V11l-4-4h-3z"/></svg>
+                            <svg width="20" height="20" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zm10 0a2 2 0 11-4 0 2 2 0 014 0zM13 16V8a1 1 0 00-1-1H3v9h1a1 1 0 011 1v1h12v-2a1 1 0 011-1h1V11l-4-4h-3z"/></svg>
                             <span class="ml-2 text-white">Proveedores</span>
                         </a>
 
                         <a href="{{ route('admin.usuarios.index') }}" class="nav-item {{ request()->routeIs('admin.usuarios.*') ? 'active' : '' }}">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87"/></svg>
+                            <svg width="20" height="20" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87"/></svg>
                             <span class="ml-2 text-white">Usuarios</span>
                         </a>
 
                         <a href="{{ route('admin.reportes.index') }}" class="nav-item {{ request()->routeIs('admin.reportes.*') ? 'active' : '' }}">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3v18h18"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20V9M12 20V4M17 20v-6"/></svg>
+                            <svg width="20" height="20" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3v18h18"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20V9M12 20V4M17 20v-6"/></svg>
                             <span class="ml-2 text-white">Reportes</span>
                         </a>
                         @endif
@@ -190,7 +194,7 @@
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" class="w-full nav-item text-left text-white hover:bg-white/10">
-                                    <svg class="w-5 h-5 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1"/></svg>
+                                    <svg width="20" height="20" class="w-5 h-5 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1"/></svg>
                                     <span class="ml-2">Cerrar sesión</span>
                                 </button>
                             </form>
