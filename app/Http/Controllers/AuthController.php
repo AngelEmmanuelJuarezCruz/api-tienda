@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     /**
-     * Handle a login request.
+     * Procesa la solicitud de inicio de sesión.
      */
     public function login(Request $request)
     {
@@ -20,32 +20,31 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
 
-            // Redirect based on user role
             $user = Auth::user();
             $role = strtolower($user->rol ?? '');
 
-            if ($role === 'dueno' || $role === 'dueño') {
-                return redirect()->route('admin.index');
+            if (in_array($role, ['dueno', 'dueño', 'administrador'])) {
+                return redirect()->intended('/admin');
             }
 
             if ($role === 'encargado') {
-                return redirect()->route('encargado.dashboard');
+                return redirect()->intended('/almacen');
             }
 
             if ($role === 'cajero') {
-                return redirect()->route('cajero.dashboard');
+                return redirect()->intended('/ventas');
             }
 
             return redirect()->intended('/');
         }
 
         return back()->withErrors([
-            'email' => 'Las credenciales no coinciden con nuestros registros.',
+            'email' => 'Las credenciales proporcionadas no coinciden con nuestros registros.',
         ])->withInput($request->only('email'));
     }
 
     /**
-     * Log the user out of the application.
+     * Cierra la sesión del usuario.
      */
     public function logout(Request $request)
     {
@@ -54,6 +53,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return redirect('/');
     }
 }

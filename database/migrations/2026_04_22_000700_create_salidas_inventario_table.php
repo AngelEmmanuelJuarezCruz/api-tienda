@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('producto_id')->constrained('productos')->restrictOnDelete()->cascadeOnUpdate();
             $table->foreignId('usuario_id')->constrained('users')->restrictOnDelete()->cascadeOnUpdate();
             $table->unsignedInteger('cantidad');
-            $table->enum('motivo', ['MERMA', 'AJUSTE']);
+            $table->string('motivo', 20);
             $table->dateTime('fecha');
             $table->text('justificacion')->nullable();
             $table->timestamps();

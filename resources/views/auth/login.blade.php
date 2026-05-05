@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('js/tailwindcss.js') }}"></script>
     <style>body{font-family:'Poppins',sans-serif;background-color:#F2F4F7}</style>
 </head>
 <body class="min-h-screen flex items-center justify-center" style="background-color:#F2F4F7;">
@@ -24,7 +24,7 @@
                 <p class="text-sm text-gray-500">Sistema Integral de Ventas y Gestión de Inventarios</p>
             </header>
             
-            <form id="loginForm" method="POST" action="{{ route('login') }}" novalidate>
+            <form id="loginForm" method="POST" action="{{ route('login.post') }}" novalidate>
                 @csrf
 
                 {{-- Email --}}

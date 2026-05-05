@@ -49,4 +49,72 @@ class User extends Authenticatable
             'activo' => 'boolean',
         ];
     }
+
+    // ========== RELACIONES ==========
+
+    /**
+     * Un usuario tiene muchas ventas
+     */
+    public function ventas()
+    {
+        return $this->hasMany(Venta::class);
+    }
+
+    /**
+     * Un usuario registra muchas entradas de inventario
+     */
+    public function entradasInventario()
+    {
+        return $this->hasMany(EntradaInventario::class);
+    }
+
+    /**
+     * Un usuario registra muchas salidas de inventario
+     */
+    public function salidasInventario()
+    {
+        return $this->hasMany(SalidaInventario::class);
+    }
+
+    // ========== SCOPES ==========
+
+    /**
+     * Filtrar solo usuarios activos
+     */
+    public function scopeActivos($query)
+    {
+        return $query->where('activo', true);
+    }
+
+    /**
+     * Filtrar por rol específico
+     */
+    public function scopePorRol($query, $rol)
+    {
+        return $query->where('rol', $rol);
+    }
+
+    /**
+     * Obtener solo dueños
+     */
+    public function scopeDuenos($query)
+    {
+        return $query->where('rol', 'dueno');
+    }
+
+    /**
+     * Obtener solo encargados
+     */
+    public function scopeEncargados($query)
+    {
+        return $query->where('rol', 'encargado');
+    }
+
+    /**
+     * Obtener solo cajeros
+     */
+    public function scopeCajeros($query)
+    {
+        return $query->where('rol', 'cajero');
+    }
 }
