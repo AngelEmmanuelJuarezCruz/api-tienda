@@ -17,41 +17,37 @@
         <main class="main-content flex-1 p-4 md:p-8">
 
             {{-- TOPBAR --}}
-            <div class="flex items-center justify-between mb-6 floating-topbar">
-                <div class="flex items-center gap-4">
-                    <button id="sidebar-toggle" onclick="toggleSidebar()" class="p-2 rounded-md bg-white/90 text-[#1E3A8A] focus:outline-none">
-                        <svg width="24" height="24" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            <div class="floating-topbar">
+                <div style="display:flex;align-items:center;gap:16px;">
+                    <button id="sidebar-toggle" aria-label="Toggle sidebar" aria-expanded="true" onclick="toggleSidebar()" class="hamburger-btn p-2 rounded-md bg-white/90 text-[#1E3A8A] focus:outline-none">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
                     </button>
                     @auth
                         @php $topRole = strtolower(Auth::user()->rol ?? ''); @endphp
                         @if($topRole === 'cajero')
-                                <a href="{{ route('cajero.dashboard') }}" class="text-xl font-bold text-gray-800">Gestión de Insumos Médicos</a>
-                            @else
-                                <a href="{{ route('admin.index') }}" class="text-xl font-bold text-gray-800">Gestión de Insumos Médicos</a>
-                            @endif
+                            <div class="text-xl font-semibold" style="color:#1E3A8A;">Gestión de Insumos Médicos</div>
+                        @else
+                            <div class="text-xl font-semibold" style="color:#1E3A8A;">Gestión de Insumos Médicos</div>
+                        @endif
                     @else
-                        <a href="{{ route('admin.index') }}" class="text-xl font-bold text-gray-800" style="font-family: 'Poppins', sans-serif;">Gestión de Insumos Médicos</a>
+                        <div class="text-xl font-semibold" style="color:#1E3A8A;">Gestión de Insumos Médicos</div>
                     @endauth
                 </div>
 
-                <div class="flex items-center gap-4">
+                <div>
                     @auth
-                        <div class="relative flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-sm font-semibold text-[#1E3A8A]">{{ strtoupper(substr(Auth::user()->name,0,1)) }}</div>
-                            <div class="hidden md:flex md:flex-col md:items-start">
-                                <span class="text-sm text-gray-800 font-medium">{{ Auth::user()->name }}</span>
-                                <span class="text-xs text-[#1E3A8A]">{{ Auth::user()->rol }}</span>
-                            </div>
-                        </div>
+                        <div class="user-profile" style="font-weight:600;color:#1E3A8A;">{{ ucfirst(Auth::user()->rol ?? 'Rol') }} | {{ Auth::user()->name ?? 'Usuario' }}</div>
                     @endauth
                 </div>
             </div>
 
             {{-- SIDEBAR (fixed, pushes content) --}}
             <aside id="sidebar">
-                        <a href="{{ route('admin.index') }}" class="flex items-center gap-3 mb-6">
-                    <svg width="32" height="32" class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7l9-4 9 4v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-                    <h1 class="text-lg font-bold text-white">Gestión de Insumos Médicos</h1>
+                        <a href="{{ route('admin.index') }}" class="sidebar-brand flex items-center gap-3 mb-6">
+                    <svg width="28" height="28" class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7l9-4 9 4v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+                    <h1>Gestión de Insumos Médicos</h1>
                 </a>
 
                 <nav class="nav-items">
