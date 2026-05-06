@@ -18,8 +18,8 @@ class AlmacenController extends Controller
         $validated = $request->validate([
             'nombre' => 'required|string|max:160|unique:productos,nombre',
             'codigo_barras' => 'nullable|string|max:100|unique:productos,codigo_barras',
-            'precio' => 'required|numeric|min:0',
-            'cantidad' => 'required|integer|min:0',
+            'precio_venta' => 'required|numeric|min:0',
+            'stock_actual' => 'required|integer|min:0',
             'descripcion' => 'nullable|string',
         ]);
 
@@ -32,8 +32,8 @@ class AlmacenController extends Controller
                 'sku' => $validated['codigo_barras'] ?? null,
                 'descripcion' => $validated['descripcion'] ?? null,
                 'precio_compra' => 0,
-                'precio_venta' => $validated['precio'],
-                'stock_actual' => $validated['cantidad'],
+                'precio_venta' => $validated['precio_venta'],
+                'stock_actual' => $validated['stock_actual'],
                 'stock_minimo' => 0,
                 'activo' => true,
             ]);

@@ -49,21 +49,21 @@
             <label class="block text-gray-700 font-semibold mb-2">Precio:</label>
             <div class="relative">
                 <span class="absolute left-3 top-3 text-gray-500">$</span>
-                <input type="number" name="precio" value="{{ old('precio') }}" step="0.01" required 
-                       class="w-full rounded-lg p-3 pl-8 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition border {{ $errors->has('precio') ? 'border-red-500' : 'border-gray-300' }}"
+                <input type="number" name="precio_venta" value="{{ old('precio_venta') }}" step="0.01" required 
+                       class="w-full rounded-lg p-3 pl-8 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition border {{ $errors->has('precio_venta') ? 'border-red-500' : 'border-gray-300' }}"
                        placeholder="0.00">
             </div>
-            @error('precio')
+            @error('precio_venta')
                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
             @enderror
         </div>
 
         <div class="mb-8">
             <label class="block text-gray-700 font-semibold mb-2">Cantidad</label>
-            <input type="number" name="cantidad" value="{{ old('cantidad', 0) }}" required 
-                   class="w-full rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition border {{ $errors->has('cantidad') ? 'border-red-500' : 'border-gray-300' }}"
+            <input type="number" name="stock_actual" value="{{ old('stock_actual', 0) }}" required 
+                   class="w-full rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition border {{ $errors->has('stock_actual') ? 'border-red-500' : 'border-gray-300' }}"
                    placeholder="Cantidad en almacén">
-            @error('cantidad')
+            @error('stock_actual')
                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
             @enderror
         </div>
