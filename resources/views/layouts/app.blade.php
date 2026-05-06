@@ -18,23 +18,24 @@
 
             {{-- TOPBAR --}}
             <div class="floating-topbar">
-                <div style="display:flex;align-items:center;gap:16px;">
-                    <button id="btnToggleSidebar" style="background: transparent; border: none; cursor: pointer; padding: 5px; display: flex; align-items: center;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#1E3A8A" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
-                </div>
-
-                <div style="display:flex;align-items:center;gap:12px;">
-                    @auth
-                        <div style="display:flex;align-items:center;gap:8px;color:#111827;font-weight:600;">
-                            <div>{{ ucfirst(Auth::user()->rol ?? 'Dueño') }} | {{ Auth::user()->name ?? 'Nombre' }}</div>
-                            <div style="width:36px;height:36px;border-radius:9999px;background:#E6EEF8;display:flex;align-items:center;justify-content:center;color:#1E3A8A;font-weight:700;">
-                                {{ strtoupper(substr(Auth::user()->name ?? 'U',0,1)) }}
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                    <div class="topbar-left" style="display: flex; align-items: center;">
+                        <button id="btnToggleSidebar" style="background: transparent; border: none; cursor: pointer; padding: 5px; display: flex;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#1E3A8A" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="topbar-right">
+                        @auth
+                            <div style="display:flex;align-items:center;gap:8px;color:#111827;font-weight:600;">
+                                <div>{{ ucfirst(Auth::user()->rol ?? 'Dueño') }} | {{ Auth::user()->name ?? 'Nombre' }}</div>
+                                <div style="width:36px;height:36px;border-radius:9999px;background:#E6EEF8;display:flex;align-items:center;justify-content:center;color:#1E3A8A;font-weight:700;">
+                                    {{ strtoupper(substr(Auth::user()->name ?? 'U',0,1)) }}
+                                </div>
                             </div>
-                        </div>
-                    @endauth
+                        @endauth
+                    </div>
                 </div>
             </div>
 
