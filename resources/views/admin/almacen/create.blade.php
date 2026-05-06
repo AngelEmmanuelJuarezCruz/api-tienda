@@ -48,6 +48,16 @@
             @enderror
         </div>
 
+        <div class="mb-5">
+            <label class="block text-gray-700 font-semibold mb-2">SKU</label>
+            <input type="text" name="sku" value="{{ old('sku') }}" required
+                   class="w-full rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] transition border {{ $errors->has('sku') ? 'border-red-500' : 'border-gray-300' }}"
+                   placeholder="Ej. SKU12345">
+            @error('sku')
+                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="mb-5">
                 <label class="block text-gray-700 font-semibold mb-2">Precio de Venta</label>

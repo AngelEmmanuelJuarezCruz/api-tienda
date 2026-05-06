@@ -26,7 +26,7 @@ class AlmacenController extends Controller
         $validated = $request->validate([
             'categoria_id' => 'required|exists:categorias,id',
             'nombre' => 'required|string|max:160|unique:productos,nombre',
-            'sku' => 'nullable|string|max:100|unique:productos,sku',
+            'sku' => 'required|string|max:100|unique:productos,sku',
             'precio_venta' => 'required|numeric|min:0',
             'stock_actual' => 'required|integer|min:0',
         ]);
@@ -46,7 +46,7 @@ class AlmacenController extends Controller
                 'categoria_id' => $validated['categoria_id'],
                 'proveedor_id' => $firstProveedor->id,
                 'nombre' => $validated['nombre'],
-                'sku' => $validated['sku'] ?? null,
+                'sku' => $validated['sku'],
                 'precio_venta' => $validated['precio_venta'],
                 'stock_actual' => $validated['stock_actual'],
             ]);
