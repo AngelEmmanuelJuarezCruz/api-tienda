@@ -19,21 +19,11 @@
             {{-- TOPBAR --}}
             <div class="floating-topbar">
                 <div style="display:flex;align-items:center;gap:16px;">
-                    <button id="sidebar-toggle" aria-label="Toggle sidebar" aria-expanded="true" onclick="toggleSidebar()" class="hamburger-btn" style="background:transparent;border:none;cursor:pointer;padding:6px;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111827" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    <button id="btnToggleSidebar" style="background: transparent; border: none; cursor: pointer; padding: 5px; display: flex; align-items: center;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#1E3A8A" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
-                    @auth
-                        @php $topRole = strtolower(Auth::user()->rol ?? ''); @endphp
-                        @if($topRole === 'cajero')
-                            <div class="text-xl font-semibold" style="color:#1E3A8A;">Gestión de Insumos Médicos</div>
-                        @else
-                            <div class="text-xl font-semibold" style="color:#1E3A8A;">Gestión de Insumos Médicos</div>
-                        @endif
-                    @else
-                        <div class="text-xl font-semibold" style="color:#1E3A8A;">Gestión de Insumos Médicos</div>
-                    @endauth
                 </div>
 
                 <div style="display:flex;align-items:center;gap:12px;">
@@ -189,6 +179,12 @@
         document.addEventListener('click', function(e){
             var menu = document.getElementById('user-menu'); var btn = document.getElementById('user-menu-button');
             if (menu && btn && !menu.classList.contains('hidden') && !menu.contains(e.target) && !btn.contains(e.target)) menu.classList.add('hidden');
+        });
+    </script>
+    <script>
+        document.getElementById('btnToggleSidebar').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('sidebar-collapsed');
+            document.querySelector('.main-content').classList.toggle('expanded');
         });
     </script>
 </body>
