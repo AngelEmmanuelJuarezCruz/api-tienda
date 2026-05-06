@@ -20,19 +20,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Example rows; backend should render results -->
-                        <tr>
-                            <td>Guantes de látex (M)</td>
-                            <td>123456789</td>
-                            <td>$2.50</td>
-                            <td><button class="btn-primary" style="padding:6px 10px;font-size:14px;">Agregar al ticket</button></td>
-                        </tr>
-                        <tr>
-                            <td>Jeringa 5 ml</td>
-                            <td>987654321</td>
-                            <td>$0.80</td>
-                            <td><button class="btn-primary" style="padding:6px 10px;font-size:14px;">Agregar al ticket</button></td>
-                        </tr>
+                        @forelse ($productos as $producto)
+                            <tr>
+                                <td>{{ $producto->nombre }}</td>
+                                <td>{{ $producto->codigo_barras ?? $producto->sku }}</td>
+                                <td>${{ number_format((float) $producto->precio_venta, 2) }}</td>
+                                <td><button class="btn-primary" style="padding:6px 10px;font-size:14px;" type="button">Agregar al ticket</button></td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4">No hay productos activos para mostrar.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -40,26 +39,30 @@
     </div>
 
     <div>
-        <div class="panel-white" style="background:#F9FAFB;">
+        <form class="panel-white" style="background:#F9FAFB;" action="{{ route($storeRoute) }}" method="POST">
+            @csrf
             <h3 class="text-lg font-semibold mb-3">Ticket de Venta</h3>
             <div id="ticket-items" style="min-height:220px;">
-                <p class="text-sm text-muted">No hay productos añadidos.</p>
-                <!-- Example item structure:
-                <div class="flex justify-between items-center py-2">
-                    <div><strong>Guantes M</strong><div class="text-sm text-muted">x2</div></div>
-                    <div>$5.00</div>
-                </div>
-                -->
+                @forelse ($ticketItems as $item)
+                    <div class="flex justify-between items-center py-2">
+                        <div><strong>{{ $item['nombre'] }}</strong><div class="text-sm text-muted">x{{ $item['cantidad'] }}</div></div>
+                        <div>${{ number_format($item['subtotal'], 2) }}</div>
+                    </div>
+                    <input type="hidden" name="productos[{{ $loop->index }}][producto_id]" value="{{ $item['producto_id'] }}">
+                    <input type="hidden" name="productos[{{ $loop->index }}][cantidad]" value="{{ $item['cantidad'] }}">
+                @empty
+                    <p class="text-sm text-muted">No hay productos añadidos.</p>
+                @endforelse
             </div>
 
             <div style="margin-top:18px;border-top:1px solid #E6E9EF;padding-top:16px;">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
                     <div class="text-lg font-semibold">Total:</div>
-                    <div class="text-2xl font-bold">$0.00</div>
+                    <div class="text-2xl font-bold">${{ number_format($total, 2) }}</div>
                 </div>
-                <button class="btn-primary" style="width:100%;background:#10B981;border:none;padding:12px 16px;font-size:16px;">Cobrar</button>
+                <button class="btn-primary" style="width:100%;background:#10B981;border:none;padding:12px 16px;font-size:16px;" type="submit">Cobrar</button>
             </div>
-        </div>
+        </form>
     </div>
 </div>
 

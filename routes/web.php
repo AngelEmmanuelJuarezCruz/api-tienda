@@ -41,6 +41,7 @@ Route::middleware(['auth', 'role:dueno,administrador'])->prefix('admin')->group(
 // Ventas: movida bajo /admin y accesible para el Dueño
 Route::middleware(['auth', 'role:dueno'])->prefix('admin')->group(function () {
     Route::get('/ventas', [VentasController::class, 'index'])->name('admin.ventas.index');
+    Route::post('/ventas', [VentasController::class, 'store'])->name('admin.ventas.store');
     // Usuarios - acceso exclusivo del Dueño
     Route::get('/usuarios', [UsuariosController::class, 'index'])->name('admin.usuarios.index');
     // Reportes - panel de inteligencia (Dueño)
@@ -80,4 +81,5 @@ Route::middleware(['auth', 'role:cajero'])->prefix('cajero')->group(function () 
 
     // Punto de venta para cajeros (reutiliza el controlador de Ventas)
     Route::get('/ventas', [VentasController::class, 'index'])->name('cajero.ventas.index');
+    Route::post('/ventas', [VentasController::class, 'store'])->name('cajero.ventas.store');
 });

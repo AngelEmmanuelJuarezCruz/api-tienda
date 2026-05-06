@@ -16,7 +16,25 @@ class VentasController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.ventas.index');
+        $user = Auth::user();
+        $productos = Producto::query()
+            ->activos()
+            ->with(['categoria', 'proveedor'])
+            ->orderBy('nombre')
+            ->limit(6)
+            ->get();
+
+        $ticketItems = $this->buildTicketItems($productos);
+        $subtotal = collect($ticketItems)->sum('subtotal');
+        $iva = round($subtotal * 0.16, 2);
+        $total = round($subtotal + $iva, 2);
+        $storeRoute = $user && $user->rol === 'cajero' ? 'cajero.ventas.store' : 'admin.ventas.store';
+
+        if ($user && $user->rol === 'cajero') {
+            return view('cajero.ventas.index', compact('productos', 'ticketItems', 'subtotal', 'iva', 'total', 'storeRoute'));
+        }
+
+        return view('admin.ventas.index', compact('productos', 'ticketItems', 'subtotal', 'iva', 'total', 'storeRoute'));
     }
 
     /**
@@ -94,11 +112,45 @@ class VentasController extends Controller
                     ]);
                 }
 
-                return redirect()->route('ventas.dashboard')->with('success', 'Venta registrada con éxito bajo folio: ' . $folio);
+                return redirect()->route($this->ventasIndexRoute())->with('success', 'Venta registrada con éxito bajo folio: ' . $folio);
             });
         } catch (\Exception $e) {
             // Regresar al cliente con el mensaje de invalidación de inventario o error interno
             return back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
+    }
+
+    private function ventasIndexRoute(): string
+    {
+        $user = Auth::user();
+
+        if ($user && $user->rol === 'cajero') {
+            return 'cajero.ventas.index';
+        }
+
+        return 'admin.ventas.index';
+    }
+
+    /**
+     * Build a small sample ticket from the available catalog.
+     */
+    private function buildTicketItems($productos): array
+    {
+        return $productos
+            ->take(2)
+            ->values()
+            ->map(function (Producto $producto, int $index) {
+                $cantidad = $index === 0 ? 1 : 2;
+                $precioUnitario = (float) $producto->precio_venta;
+
+                return [
+                    'producto_id' => $producto->id,
+                    'nombre' => $producto->nombre,
+                    'cantidad' => $cantidad,
+                    'precio_unitario' => $precioUnitario,
+                    'subtotal' => round($precioUnitario * $cantidad, 2),
+                ];
+            })
+            ->all();
     }
 }
