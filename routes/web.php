@@ -9,7 +9,7 @@ use App\Http\Controllers\Admin\UsuariosController;
 use App\Http\Controllers\Admin\ReportesController;
 
 Route::get('/', function () {
-    return redirect()->route('login.form');
+    return redirect()->route('login');
 });
 
 // Ruta temporal ver su diseño Frontend

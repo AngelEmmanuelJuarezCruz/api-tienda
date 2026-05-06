@@ -12,8 +12,8 @@
 /* Page defaults */
 html,body{height:100%;background:var(--gris-claro);font-family:Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;color:#1f2937}
 
-/* Sidebar */
-#sidebar{background:var(--azul-profesional);color:#ffffff}
+/* Sidebar: fixed left column */
+#sidebar{position:fixed;top:0;left:0;width:250px;height:100vh;background:var(--azul-profesional);overflow-y:auto;z-index:1000;padding:1rem;display:flex;flex-direction:column;gap:0.5rem;transition:all .3s ease;color:#ffffff}
 #sidebar a{color:#ffffff;text-decoration:none}
 #sidebar .nav-items{display:flex;flex-direction:column;gap:0.6rem}
 #sidebar .nav-item{display:flex;align-items:center;gap:10px;padding:12px;border-radius:8px;color:#fff;transition:background .15s ease}
@@ -24,9 +24,10 @@ html,body{height:100%;background:var(--gris-claro);font-family:Poppins, system-u
 /* Ensure anchor default focus/visited do not show purple */
 #sidebar a:link,#sidebar a:visited,#sidebar a:hover,#sidebar a:active{color:#ffffff}
 
-/* Main content pushed by sidebar width (keeps existing design) */
-.main-content{margin-left:16rem;transition:all .3s}
-.sidebar-collapsed .main-content{margin-left:5rem}
+/* Main content area (to the right of the fixed sidebar) */
+.main-content{margin-left:250px;padding:20px;width:calc(100% - 250px);min-height:100vh;background:var(--gris-claro);transition:all .3s}
+.sidebar-collapsed #sidebar{width:5rem}
+.sidebar-collapsed .main-content{margin-left:5rem;width:calc(100% - 5rem)}
 
 /* Topbar */
 .floating-topbar{background:#F2F4F7;border-radius:9999px;padding:.5rem 1rem;box-shadow:0 8px 20px rgba(2,6,23,0.06)}
