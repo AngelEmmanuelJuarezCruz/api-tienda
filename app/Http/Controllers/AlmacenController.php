@@ -23,7 +23,7 @@ class AlmacenController extends Controller
     {
         // Validación estricta: usar solo las columnas del modelo solicitadas
         $validated = $request->validate([
-            'categoria_id' => 'required|exists:categorias,id',
+            'categoria_id' => 'nullable|exists:categorias,id',
             'nombre' => 'required|string|max:160|unique:productos,nombre',
             'sku' => 'nullable|string|max:100|unique:productos,sku',
             'precio_venta' => 'required|numeric|min:0',
@@ -34,8 +34,10 @@ class AlmacenController extends Controller
             DB::beginTransaction();
 
             // Guardar únicamente las columnas solicitadas
+            $categoriaId = $validated['categoria_id'] ?? 1;
+
             $producto = Producto::create([
-                'categoria_id' => $validated['categoria_id'],
+                'categoria_id' => $categoriaId,
                 'nombre' => $validated['nombre'],
                 'sku' => $validated['sku'] ?? null,
                 'precio_venta' => $validated['precio_venta'],

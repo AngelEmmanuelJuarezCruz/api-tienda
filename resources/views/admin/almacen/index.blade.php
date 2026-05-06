@@ -40,7 +40,7 @@
             </td>
 
             <td class="px-4 py-4 text-sm text-gray-600">
-                {{ $producto->categoria_id ?? '—' }}
+                {{ $producto->categoria->nombre ?? '—' }}
             </td>
 
             <td class="px-4 py-4 text-sm">
