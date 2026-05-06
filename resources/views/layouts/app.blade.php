@@ -19,8 +19,8 @@
             {{-- TOPBAR --}}
             <div class="floating-topbar">
                 <div style="display:flex;align-items:center;gap:16px;">
-                    <button id="sidebar-toggle" aria-label="Toggle sidebar" aria-expanded="true" onclick="toggleSidebar()" class="hamburger-btn p-2 rounded-md bg-white/90 text-[#1E3A8A] focus:outline-none">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <button id="sidebar-toggle" aria-label="Toggle sidebar" aria-expanded="true" onclick="toggleSidebar()" class="hamburger-btn" style="background:transparent;border:none;cursor:pointer;padding:6px;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111827" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
@@ -36,9 +36,14 @@
                     @endauth
                 </div>
 
-                <div>
+                <div style="display:flex;align-items:center;gap:12px;">
                     @auth
-                        <div class="user-profile" style="font-weight:600;color:#1E3A8A;">{{ ucfirst(Auth::user()->rol ?? 'Rol') }} | {{ Auth::user()->name ?? 'Usuario' }}</div>
+                        <div style="display:flex;align-items:center;gap:8px;color:#111827;font-weight:600;">
+                            <div>{{ ucfirst(Auth::user()->rol ?? 'Dueño') }} | {{ Auth::user()->name ?? 'Nombre' }}</div>
+                            <div style="width:36px;height:36px;border-radius:9999px;background:#E6EEF8;display:flex;align-items:center;justify-content:center;color:#1E3A8A;font-weight:700;">
+                                {{ strtoupper(substr(Auth::user()->name ?? 'U',0,1)) }}
+                            </div>
+                        </div>
                     @endauth
                 </div>
             </div>
@@ -46,9 +51,15 @@
             {{-- SIDEBAR (fixed, pushes content) --}}
             <aside id="sidebar">
                         <a href="{{ route('admin.index') }}" class="sidebar-brand flex items-center gap-3 mb-6">
-                    <svg width="28" height="28" class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7l9-4 9 4v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-                    <h1>Gestión de Insumos Médicos</h1>
-                </a>
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex:0 0 auto;">
+                                <rect x="10" y="3" width="4" height="18" rx="1" fill="#FFFFFF"/>
+                                <rect x="3" y="10" width="18" height="4" rx="1" fill="#FFFFFF"/>
+                            </svg>
+                            <div class="brand-text" style="line-height:1;">
+                                <div style="font-size:12px;font-weight:700;color:#ffffff;text-transform:uppercase;">PROVEEDORA DE</div>
+                                <div style="font-size:12px;font-weight:700;color:#ffffff;text-transform:uppercase;">INSUMOS MÉDICOS</div>
+                            </div>
+                        </a>
 
                 <nav class="nav-items">
                     @auth
@@ -131,8 +142,12 @@
                         <div class="mt-auto">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="w-full nav-item text-left text-white hover:bg-white/10">
-                                    <svg width="20" height="20" class="w-5 h-5 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1"/></svg>
+                                <button type="submit" class="w-full nav-item logout-btn" style="display:flex;align-items:center;">
+                                    <svg width="20" height="20" class="w-5 h-5 mr-2 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M16 17l5-5-5-5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M21 12H9" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M13 19H6a2 2 0 01-2-2V7a2 2 0 012-2h7" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
                                     <span class="ml-2">Cerrar sesión</span>
                                 </button>
                             </form>

@@ -14,50 +14,46 @@
 
         <div class="metric-grid mb-6">
             <!-- Ventas del día -->
-            <div class="bg-blue-50 shadow-sm rounded-lg p-4 flex items-center space-x-4 border-l-4 border-[#1E3A8A]">
-                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-[#1E3A8A]/10">
-                    <!-- Carrito icon -->
+            <div class="metric-card" style="background-color:#EFF6FF;">
+                <div class="icon" style="background:transparent">
                     <svg class="w-6 h-6 text-[#1E3A8A]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 7h14l-2-7M10 21a1 1 0 100-2 1 1 0 000 2zm6 0a1 1 0 100-2 1 1 0 000 2z"></path></svg>
                 </div>
                 <div>
-                    <p class="text-sm text-gray-500">Ventas del día</p>
-                    <p class="text-xl font-semibold text-gray-900">$12,450.00</p>
+                    <p class="label">Ventas del día</p>
+                    <p class="value">$12,450.00</p>
                 </div>
             </div>
 
             <!-- Productos bajos -->
-            <div class="bg-orange-50 shadow-sm rounded-lg p-4 flex items-center space-x-4 border-l-4 border-[#FF8C42]">
-                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-[#FF8C42]/10">
-                    <!-- Alert icon -->
+            <div class="metric-card" style="background-color:#FFF7ED;">
+                <div class="icon" style="background:transparent">
                     <svg class="w-6 h-6 text-[#FF8C42]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M5.07 19h13.86A2 2 0 0021 17.08V8.92A2 2 0 0019.07 7H4.93A2 2 0 003 8.92v8.16A2 2 0 005.07 19z"></path></svg>
                 </div>
                 <div>
-                    <p class="text-sm text-gray-500">Productos bajos</p>
-                    <p class="text-xl font-semibold text-gray-900">{{ $productos_bajos }}</p>
+                    <p class="label">Productos bajos</p>
+                    <p class="value">{{ $productos_bajos }}</p>
                 </div>
             </div>
 
             <!-- Ingresos del mes -->
-            <div class="bg-green-50 shadow-sm rounded-lg p-4 flex items-center space-x-4 border-l-4 border-[#108981]">
-                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-[#108981]/10">
-                    <!-- Bill icon -->
+            <div class="metric-card" style="background-color:#F0FDF4;">
+                <div class="icon" style="background:transparent">
                     <svg class="w-6 h-6 text-[#108981]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V6m0 12v-2"></path></svg>
                 </div>
                 <div>
-                    <p class="text-sm text-gray-500">Ingresos del mes</p>
-                    <p class="text-xl font-semibold text-gray-900">$98,750.00</p>
+                    <p class="label">Ingresos del mes</p>
+                    <p class="value">$98,750.00</p>
                 </div>
             </div>
 
             <!-- Órdenes pendientes -->
-            <div class="bg-gray-50 shadow-sm rounded-lg p-4 flex items-center space-x-4 border-l-4 border-gray-700">
-                <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gray-100">
-                    <!-- Box icon -->
-                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7l9-4 9 4v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path></svg>
+            <div class="metric-card" style="background-color:#FAF5FF;">
+                <div class="icon" style="background:transparent">
+                    <svg class="w-6 h-6 text-[#6B21A8]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7l9-4 9 4v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path></svg>
                 </div>
                 <div>
-                    <p class="text-sm text-gray-500">Órdenes pendientes</p>
-                    <p class="text-xl font-semibold text-gray-900">{{ $total_usuarios }}</p>
+                    <p class="label">Órdenes pendientes</p>
+                    <p class="value">{{ $total_usuarios }}</p>
                 </div>
             </div>
         </div>
