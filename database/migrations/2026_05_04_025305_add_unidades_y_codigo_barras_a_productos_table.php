@@ -23,8 +23,18 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (Schema::hasColumn('productos', 'codigo_barras')) {
+            Schema::table('productos', function (Blueprint $table) {
+                $table->dropUnique('productos_codigo_barras_unique');
+                $table->dropColumn(['codigo_barras', 'unidad_medida']);
+            });
+        } elseif (Schema::hasColumn('productos', 'unidad_medida')) {
+            Schema::table('productos', function (Blueprint $table) {
+                $table->dropColumn(['unidad_medida']);
+            });
+        }
+
         Schema::table('productos', function (Blueprint $table) {
-            $table->dropColumn(['codigo_barras', 'unidad_medida']);
             $table->string('sku', 80)->nullable(false)->change();
         });
     }
