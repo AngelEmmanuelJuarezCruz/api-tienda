@@ -14,28 +14,23 @@ class AlmacenController extends Controller
      */
     public function store(Request $request)
     {
-        // Validación mínima requerida por la guía: nombre (único), precio y cantidad (stock)
+        // Validación estricta: usar solo las columnas del modelo solicitadas
         $validated = $request->validate([
             'nombre' => 'required|string|max:160|unique:productos,nombre',
-            'codigo_barras' => 'nullable|string|max:100|unique:productos,codigo_barras',
+            'sku' => 'nullable|string|max:100|unique:productos,sku',
             'precio_venta' => 'required|numeric|min:0',
             'stock_actual' => 'required|integer|min:0',
-            'descripcion' => 'nullable|string',
         ]);
 
         try {
             DB::beginTransaction();
 
+            // Guardar únicamente las columnas solicitadas
             $producto = Producto::create([
                 'nombre' => $validated['nombre'],
-                'codigo_barras' => $validated['codigo_barras'] ?? null,
-                'sku' => $validated['codigo_barras'] ?? null,
-                'descripcion' => $validated['descripcion'] ?? null,
-                'precio_compra' => 0,
+                'sku' => $validated['sku'] ?? null,
                 'precio_venta' => $validated['precio_venta'],
                 'stock_actual' => $validated['stock_actual'],
-                'stock_minimo' => 0,
-                'activo' => true,
             ]);
 
             // Crear lote básico si hay stock

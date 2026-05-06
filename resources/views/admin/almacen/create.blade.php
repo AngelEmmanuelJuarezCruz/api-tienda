@@ -36,17 +36,17 @@
         </div>
 
         <div class="mb-5">
-            <label class="block text-gray-700 font-semibold mb-2">Código de Barras</label>
-            <input type="text" name="codigo_barras" value="{{ old('codigo_barras') }}"
-                   class="w-full rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition border {{ $errors->has('codigo_barras') ? 'border-red-500' : 'border-gray-300' }}"
-                   placeholder="Opcional">
-            @error('codigo_barras')
+            <label class="block text-gray-700 font-semibold mb-2">SKU (opcional)</label>
+            <input type="text" name="sku" value="{{ old('sku') }}"
+                   class="w-full rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition border {{ $errors->has('sku') ? 'border-red-500' : 'border-gray-300' }}"
+                   placeholder="Ej. SKU12345">
+            @error('sku')
                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
             @enderror
         </div>
 
         <div class="mb-5">
-            <label class="block text-gray-700 font-semibold mb-2">Precio:</label>
+            <label class="block text-gray-700 font-semibold mb-2">Precio de Venta</label>
             <div class="relative">
                 <span class="absolute left-3 top-3 text-gray-500">$</span>
                 <input type="number" name="precio_venta" value="{{ old('precio_venta') }}" step="0.01" required 
@@ -59,7 +59,7 @@
         </div>
 
         <div class="mb-8">
-            <label class="block text-gray-700 font-semibold mb-2">Cantidad</label>
+            <label class="block text-gray-700 font-semibold mb-2">Stock Inicial</label>
             <input type="number" name="stock_actual" value="{{ old('stock_actual', 0) }}" required 
                    class="w-full rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition border {{ $errors->has('stock_actual') ? 'border-red-500' : 'border-gray-300' }}"
                    placeholder="Cantidad en almacén">
