@@ -13,7 +13,7 @@
             </div>
 
             <div style="margin-left:16px;">
-                <a href="{{ route('admin.proveedores.create') ?? '#' }}" class="btn-primary">+ Agregar Proveedor</a>
+                <a href="#" class="btn-primary">+ Agregar Proveedor</a>
             </div>
         </div>
 
