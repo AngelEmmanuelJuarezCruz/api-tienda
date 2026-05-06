@@ -13,11 +13,13 @@ class CategoriaSeeder extends Seeder
     public function run(): void
     {
         $categorias = [
-            'Abarrotes',
-            'Lacteos',
-            'Bebidas',
-            'Limpieza',
-            'Dulceria',
+            'Medicamentos',
+            'Dispositivos Medicos',
+            'Insumos Quirurgicos',
+            'Diagnostico',
+            'Material de Curacion',
+            'EPP',
+            'Desinfectantes',
         ];
 
         foreach ($categorias as $nombre) {

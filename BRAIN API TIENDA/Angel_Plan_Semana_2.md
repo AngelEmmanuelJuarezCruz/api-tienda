@@ -67,7 +67,7 @@ php artisan migrate:status
 | Tabla | Cantidad | Detalles |
 |-------|----------|----------|
 | Usuarios | 5 | 3 roles (dueno, encargado, cajero) + 2 extra |
-| Categorías | 8 | Rubros estándar tienda abarrotes |
+| Categorías | 7 | Rubros de insumos medicos |
 | Proveedores | 5 | Proveedores diversificados |
 | Productos | 9 | Mix stock: 1 con stock bajo (<5), otros normales |
 | Lotes | 0 | Será llenado por entradas de inventario |
@@ -83,7 +83,7 @@ php artisan migrate:status
 
 **Producto con stock bajo (validación de requisito):**
 ```
-✓ Cloro 1L: 4 unidades (< 5)
+✓ Alcohol isopropilico 70% 1L: 4 unidades (< 5)
 ```
 
 **Para ejecutar seeders:**
@@ -103,7 +103,7 @@ php artisan db:seed
 | 3 roles en usuarios | ✅ | dueno, encargado, cajero |
 | 5 categorías | ✅ | 8 categorías (excede expectativa) |
 | 8 productos | ✅ | 9 productos (excede expectativa) |
-| Stock bajo visible | ✅ | Cloro 1L: 4 unidades |
+| Stock bajo visible | ✅ | Alcohol isopropilico 70% 1L: 4 unidades |
 | Fechas de caducidad en BD | ✅ | Campo fecha_caducidad en productos |
 | Seeders funcionales | ✅ | php artisan db:seed ejecuta sin errores |
 

@@ -79,27 +79,27 @@ class AlmacenController extends Controller
         $producto = Producto::findOrFail($id);
 
         $validated = $request->validate([
-            'categoria_id' => 'required|exists:categorias,id',
-            'proveedor_id' => 'required|exists:proveedores,id',
+            'categoria_id' => 'nullable|exists:categorias,id',
+            'proveedor_id' => 'nullable|exists:proveedores,id',
             'nombre' => 'required|string|max:160',
-            'codigo_barras' => 'required|string|max:100|unique:productos,codigo_barras,' . $producto->id,
+            'codigo_barras' => 'nullable|string|max:100|unique:productos,codigo_barras,' . $producto->id,
             'descripcion' => 'nullable|string',
             'precio' => 'required|numeric|min:0',
             'stock' => 'required|numeric|min:0',
-            'unidad_medida' => 'required|in:pieza,caja,kilo,metro',
+            'unidad_medida' => 'nullable|in:pieza,caja,kilo,metro',
             'tiene_caducidad' => 'boolean',
-            'fecha_caducidad' => 'required_if:tiene_caducidad,true|date|nullable',
+            'fecha_caducidad' => 'nullable|date|required_if:tiene_caducidad,true',
         ]);
 
         try {
             DB::beginTransaction();
 
             $producto->update([
-                'categoria_id' => $validated['categoria_id'],
-                'proveedor_id' => $validated['proveedor_id'],
+                'categoria_id' => $validated['categoria_id'] ?? $producto->categoria_id,
+                'proveedor_id' => $validated['proveedor_id'] ?? $producto->proveedor_id,
                 'nombre' => $validated['nombre'],
-                'codigo_barras' => $validated['codigo_barras'],
-                'unidad_medida' => $validated['unidad_medida'],
+                'codigo_barras' => $validated['codigo_barras'] ?? $producto->codigo_barras,
+                'unidad_medida' => $validated['unidad_medida'] ?? $producto->unidad_medida,
                 'descripcion' => $validated['descripcion'] ?? null,
                 'precio_venta' => $validated['precio'],
                 'tiene_caducidad' => $validated['tiene_caducidad'] ?? false,

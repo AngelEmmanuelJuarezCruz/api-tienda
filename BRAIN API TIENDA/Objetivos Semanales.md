@@ -32,12 +32,12 @@ Migración entradas_inventario: producto_id, usuario_id, proveedor_id, cantidad,
 Migración salidas_inventario: producto_id, usuario_id, cantidad, motivo ENUM('MERMA','AJUSTE'), fecha, justificacion
 Migración ventas y detalles_venta
 UserSeeder con 3 usuarios reales (uno por rol, contraseña: password123 encriptada)
-CategoriaSeeder con 5 categorías reales: Abarrotes, Lácteos, Bebidas, Limpieza, Dulcería
-ProductoSeeder con 8 productos típicos de tienda (arroz, leche, jabón, refresco, etc.), 2 de ellos con stock_actual < stock_minimo y 3 con tiene_caducidad = true
+CategoriaSeeder con 7 categorías reales: Medicamentos, Dispositivos Medicos, Insumos Quirurgicos, Diagnostico, Material de Curacion, EPP, Desinfectantes
+ProductoSeeder con 8 productos típicos de insumos medicos (guantes, gasas, termometro, oximetro, alcohol, solucion salina, jeringas, bata), 2 de ellos con stock_actual < stock_minimo y 3 con tiene_caducidad = true
 
 El jueves el profesor ve: Screenshot de las tablas con datos reales + php artisan db:seed corriendo sin errores
 [21/4, 10:50 p. m.] +52 768 104 1506: # 🚨 ORDEN DE ARRANQUE — HOY
-## Tienda de Abarrotes | Sprint 1
+## Suministros Medicos | Sprint 1
 
 ---
 
@@ -84,7 +84,7 @@ Abrir dbdiagram.io y dibujar el ERD con las 9 tablas. Esto no es opcional, es lo
 **Paso 3 — Seeders básicos hoy mismo:**
 - 3 usuarios (dueño, encargado, cajero)
 - 5 categorías reales
-- 8 productos de tienda de abarrotes
+- 8 productos de insumos medicos
 
 **Angel no se mueve a otra cosa hasta que `php artisan migrate --seed` corra sin errores.**
 
@@ -99,7 +99,7 @@ Melani puede arrancar sin esperar a Angel porque su primer objetivo no necesita 
 
 **Paso 1 — Crear el proyecto Laravel ahora:**
 ```bash
-composer create-project laravel/laravel tienda-abarrotes
+composer create-project laravel/laravel api-tienda
 ```
 Configurar `.env` con los datos de conexión a MySQL de Laragon. Confirmar que `localhost:8000` carga.
 

@@ -1,4 +1,4 @@
-# 📖 Guía de Instalación — Tienda de Abarrotes
+# 📖 Guía de Instalación — Suministros Médicos
 
 Para instalar y ejecutar el proyecto en tu computadora (desarrollo local con SQLite).
 

@@ -32,7 +32,7 @@ Migración entradas_inventario: producto_id, usuario_id, proveedor_id, cantidad,
 Migración salidas_inventario: producto_id, usuario_id, cantidad, motivo ENUM('MERMA','AJUSTE'), fecha, justificacion
 Migración ventas y detalles_venta
 UserSeeder con 3 usuarios reales (uno por rol, contraseña: password123 encriptada)
-CategoriaSeeder con 5 categorías reales: Abarrotes, Lácteos, Bebidas, Limpieza, Dulcería
-ProductoSeeder con 8 productos típicos de tienda (arroz, leche, jabón, refresco, etc.), 2 de ellos con stock_actual < stock_minimo y 3 con tiene_caducidad = true
+CategoriaSeeder con 7 categorías reales: Medicamentos, Dispositivos Medicos, Insumos Quirurgicos, Diagnostico, Material de Curacion, EPP, Desinfectantes
+ProductoSeeder con 8 productos típicos de insumos medicos (guantes, gasas, termometro, oximetro, alcohol, solucion salina, jeringas, bata), 2 de ellos con stock_actual < stock_minimo y 3 con tiene_caducidad = true
 
 El jueves el profesor ve: Screenshot de las tablas con datos reales + php artisan db:seed corriendo sin errores
