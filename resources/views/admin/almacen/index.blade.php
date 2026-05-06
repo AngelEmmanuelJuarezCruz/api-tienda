@@ -27,7 +27,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-100">
 
-    @forelse($items as $producto)
+    @forelse($productos as $producto)
 
         <tr class="{{ $producto->stock_actual < $producto->stock_minimo ? 'bg-red-50' : ($producto->tiene_caducidad ? 'bg-yellow-50' : '') }}">
 

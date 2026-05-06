@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Producto;
 use App\Models\LoteProducto;
 use App\Models\Categoria;
+use App\Models\Proveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -34,8 +35,16 @@ class AlmacenController extends Controller
             DB::beginTransaction();
 
             // Guardar únicamente las columnas solicitadas
+            // Asegurar un proveedor válido: usar proveedor enviado o el primer proveedor existente;
+            // si no existe ninguno, crear uno por defecto para evitar fallo NOT NULL.
+            $firstProveedor = Proveedor::first();
+            if (!$firstProveedor) {
+                $firstProveedor = Proveedor::create(['nombre' => 'Proveedor por defecto']);
+            }
+
             $producto = Producto::create([
                 'categoria_id' => $validated['categoria_id'],
+                'proveedor_id' => $firstProveedor->id,
                 'nombre' => $validated['nombre'],
                 'sku' => $validated['sku'] ?? null,
                 'precio_venta' => $validated['precio_venta'],

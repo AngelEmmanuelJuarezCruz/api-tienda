@@ -10,7 +10,7 @@ class AlmacenController extends Controller
 {
     public function index(Request $request)
     {
-        $items = Producto::with('categoria')->get();
-        return view('admin.almacen.index', compact('items'));
+        $productos = Producto::with('categoria')->get();
+        return view('admin.almacen.index', compact('productos'));
     }
 }
