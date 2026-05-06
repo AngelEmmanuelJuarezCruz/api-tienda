@@ -14,44 +14,36 @@ class AlmacenController extends Controller
      */
     public function store(Request $request)
     {
+        // Validación mínima requerida por la guía: nombre (único), precio y cantidad (stock)
         $validated = $request->validate([
-            'categoria_id' => 'required|exists:categorias,id',
-            'proveedor_id' => 'required|exists:proveedores,id',
-            'nombre' => 'required|string|max:160',
-            'codigo_barras' => 'required|string|max:100|unique:productos,codigo_barras',
-            'descripcion' => 'nullable|string',
+            'nombre' => 'required|string|max:160|unique:productos,nombre',
+            'codigo_barras' => 'nullable|string|max:100|unique:productos,codigo_barras',
             'precio' => 'required|numeric|min:0',
-            'stock' => 'required|numeric|min:0',
-            'unidad_medida' => 'required|in:pieza,caja,kilo,metro',
-            'tiene_caducidad' => 'boolean',
-            'fecha_caducidad' => 'required_if:tiene_caducidad,true|date|nullable',
+            'cantidad' => 'required|integer|min:0',
+            'descripcion' => 'nullable|string',
         ]);
 
         try {
             DB::beginTransaction();
 
             $producto = Producto::create([
-                'categoria_id' => $validated['categoria_id'],
-                'proveedor_id' => $validated['proveedor_id'],
                 'nombre' => $validated['nombre'],
-                'codigo_barras' => $validated['codigo_barras'],
-                'sku' => $validated['codigo_barras'], 
-                'unidad_medida' => $validated['unidad_medida'],
+                'codigo_barras' => $validated['codigo_barras'] ?? null,
+                'sku' => $validated['codigo_barras'] ?? null,
                 'descripcion' => $validated['descripcion'] ?? null,
-                'precio_compra' => 0, 
+                'precio_compra' => 0,
                 'precio_venta' => $validated['precio'],
-                'stock_actual' => $validated['stock'],
-                'stock_minimo' => 0, 
-                'tiene_caducidad' => $validated['tiene_caducidad'] ?? false,
+                'stock_actual' => $validated['cantidad'],
+                'stock_minimo' => 0,
                 'activo' => true,
             ]);
 
-            // Crear lote si el producto llega con stock o requiere caducidad
-            if ($producto->tiene_caducidad || $producto->stock_actual > 0) {
+            // Crear lote básico si hay stock
+            if ($producto->stock_actual > 0) {
                 LoteProducto::create([
                     'producto_id' => $producto->id,
                     'numero_lote' => 'LOTE-' . date('Ymd') . '-' . $producto->id,
-                    'fecha_caducidad' => $producto->tiene_caducidad ? $validated['fecha_caducidad'] : null,
+                    'fecha_caducidad' => null,
                     'cantidad_inicial' => $producto->stock_actual,
                     'cantidad_actual' => $producto->stock_actual,
                 ]);
