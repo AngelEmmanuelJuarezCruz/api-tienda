@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ProveedoresController;
 use App\Http\Controllers\VentasController;
 use App\Http\Controllers\Admin\UsuariosController;
 use App\Http\Controllers\Admin\ReportesController;
+use App\Http\Controllers\ProductoController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -56,7 +57,7 @@ Route::middleware(['auth', 'role:encargado,dueno,administrador'])->prefix('almac
 
     // Productos (CRUD minimal)
     Route::get('/productos', [\App\Http\Controllers\Admin\AlmacenController::class, 'index'])->name('almacen.productos');
-    Route::get('/productos/create', function(){ return view('admin.almacen.create'); })->name('almacen.productos.create');
+    Route::get('/productos/create', [\App\Http\Controllers\AlmacenController::class, 'create'])->name('almacen.productos.create');
     Route::post('/productos', [\App\Http\Controllers\AlmacenController::class, 'store'])->name('almacen.productos.store');
     Route::get('/productos/{producto}/edit', function($producto){ $p = \App\Models\Producto::findOrFail($producto); return view('admin.almacen.edit', ['producto'=>$p]); })->name('almacen.productos.edit');
     Route::put('/productos/{producto}', [\App\Http\Controllers\AlmacenController::class, 'update'])->name('almacen.productos.update');

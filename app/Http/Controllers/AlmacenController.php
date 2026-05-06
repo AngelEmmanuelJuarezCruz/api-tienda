@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Producto;
 use App\Models\LoteProducto;
+use App\Models\Categoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -12,10 +13,17 @@ class AlmacenController extends Controller
     /**
      * Store a newly created product in storage.
      */
+    public function create()
+    {
+        $categorias = Categoria::all();
+        return view('admin.almacen.create', compact('categorias'));
+    }
+
     public function store(Request $request)
     {
         // Validación estricta: usar solo las columnas del modelo solicitadas
         $validated = $request->validate([
+            'categoria_id' => 'required|exists:categorias,id',
             'nombre' => 'required|string|max:160|unique:productos,nombre',
             'sku' => 'nullable|string|max:100|unique:productos,sku',
             'precio_venta' => 'required|numeric|min:0',
@@ -27,6 +35,7 @@ class AlmacenController extends Controller
 
             // Guardar únicamente las columnas solicitadas
             $producto = Producto::create([
+                'categoria_id' => $validated['categoria_id'],
                 'nombre' => $validated['nombre'],
                 'sku' => $validated['sku'] ?? null,
                 'precio_venta' => $validated['precio_venta'],
