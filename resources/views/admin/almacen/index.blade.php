@@ -6,10 +6,12 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" style="background:#F2F4F7; font-family: 'Poppins', sans-serif;">
     <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-semibold text-gray-800">Gestión de Almacén Central</h1>
-        <button class="inline-flex items-center gap-2 bg-[#108981] hover:bg-[#0e746a] text-white px-4 py-2 rounded shadow-sm">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            + Registrar Entrada
-        </button>
+        <div class="ml-auto">
+            <button class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow-md">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                + Registrar Entrada
+            </button>
+        </div>
     </div>
 
     <div class="bg-white shadow rounded-lg overflow-hidden">
@@ -26,13 +28,12 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-100">
-
     @forelse($productos as $producto)
 
-        <tr class="{{ $producto->stock_actual < $producto->stock_minimo ? 'bg-red-50' : ($producto->tiene_caducidad ? 'bg-yellow-50' : '') }}">
+        <tr class="hover:bg-gray-50 {{ $producto->stock_actual < $producto->stock_minimo ? 'bg-red-50' : ($producto->tiene_caducidad ? 'bg-yellow-50' : '') }}">
 
             <td class="px-4 py-4 text-sm text-gray-600">
-                {{ $producto->codigo_barras }}
+                {{ $producto->sku ?? $producto->codigo_barras }}
             </td>
 
             <td class="px-4 py-4 text-sm text-gray-800 font-medium">
@@ -92,11 +93,10 @@
     @empty
         <tr>
             <td colspan="6" class="px-4 py-8 text-center text-gray-400">
-                No hay productos registrados aún.
+                No hay productos registrados en el almacén.
             </td>
         </tr>
     @endforelse
-
 </tbody>
             </table>
         </div>
