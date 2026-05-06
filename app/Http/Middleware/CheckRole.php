@@ -12,17 +12,29 @@ class CheckRole
     /**
      * Handle an incoming request.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      * @param  string  ...$roles  Roles permitidos separados por coma
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        // Validar si el usuario está autenticado y si su rol está en los permitidos
-        if (!Auth::check() || !in_array(Auth::user()->rol, $roles)) {
-            // Retorna respuesta de error 403
-            abort(403, 'Unauthorized / Access Denied');
+        $user = Auth::user();
+
+        if (! $user) {
+            return redirect('/login');
         }
 
-        return $next($request);
+        if (count($roles) === 1 && strpos($roles[0], ',') !== false) {
+            $roles = array_map('trim', explode(',', $roles[0]));
+        }
+
+        $userRole = strtolower($user->rol ?? '');
+        $allowed = array_map('strtolower', $roles);
+
+        if (in_array($userRole, $allowed)) {
+            return $next($request);
+        }
+
+        abort(403, 'No autorizado.');
     }
 }

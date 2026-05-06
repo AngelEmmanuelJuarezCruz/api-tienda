@@ -12,35 +12,35 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        // Validamos correo y contraseña
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
-        // Autenticamos contra la base de datos
-        if (Auth::attempt($credentials)) {
-            // Protección contra fijación de sesión
+        if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
-            
-            $user = Auth::user();
 
-            // Redirección post-login según el rol
-            if (in_array($user->rol, ['dueno', 'administrador'])) {
-                return redirect()->intended('/admin');
-            } elseif ($user->rol === 'encargado') {
-                return redirect()->intended('/almacen');
-            } elseif ($user->rol === 'cajero') {
-                return redirect()->intended('/ventas');
+            $user = Auth::user();
+            $role = strtolower($user->rol ?? '');
+
+            if (in_array($role, ['dueno', 'dueño', 'administrador'])) {
+                return redirect()->route('admin.index');
+            }
+
+            if ($role === 'encargado') {
+                return redirect()->route('encargado.dashboard');
+            }
+
+            if ($role === 'cajero') {
+                return redirect()->route('cajero.dashboard');
             }
 
             return redirect()->intended('/');
         }
 
-        // Si falla, regresamos atrás con error
         return back()->withErrors([
             'email' => 'Las credenciales proporcionadas no coinciden con nuestros registros.',
-        ])->onlyInput('email');
+        ])->withInput($request->only('email'));
     }
 
     /**
@@ -50,7 +50,6 @@ class AuthController extends Controller
     {
         Auth::logout();
 
-        // Invalidar sesión y regenerar token CSRF para seguridad
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

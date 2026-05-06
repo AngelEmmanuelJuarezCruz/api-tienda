@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Producto;
 use App\Models\LoteProducto;
+use App\Models\Categoria;
+use App\Models\Proveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -12,46 +14,49 @@ class AlmacenController extends Controller
     /**
      * Store a newly created product in storage.
      */
+    public function create()
+    {
+        $categorias = Categoria::all();
+        return view('admin.almacen.create', compact('categorias'));
+    }
+
     public function store(Request $request)
     {
+        // Validación estricta: usar solo las columnas del modelo solicitadas
         $validated = $request->validate([
             'categoria_id' => 'required|exists:categorias,id',
-            'proveedor_id' => 'required|exists:proveedores,id',
-            'nombre' => 'required|string|max:160',
-            'codigo_barras' => 'required|string|max:100|unique:productos,codigo_barras',
-            'descripcion' => 'nullable|string',
-            'precio' => 'required|numeric|min:0',
-            'stock' => 'required|numeric|min:0',
-            'unidad_medida' => 'required|in:pieza,caja,kilo,metro',
-            'tiene_caducidad' => 'boolean',
-            'fecha_caducidad' => 'required_if:tiene_caducidad,true|date|nullable',
+            'nombre' => 'required|string|max:160|unique:productos,nombre',
+            'sku' => 'required|string|max:100|unique:productos,sku',
+            'precio_venta' => 'required|numeric|min:0',
+            'stock_actual' => 'required|integer|min:0',
         ]);
 
         try {
             DB::beginTransaction();
 
+            // Guardar únicamente las columnas solicitadas
+            // Asegurar un proveedor válido: usar proveedor enviado o el primer proveedor existente;
+            // si no existe ninguno, crear uno por defecto para evitar fallo NOT NULL.
+            $firstProveedor = Proveedor::first();
+            if (!$firstProveedor) {
+                $firstProveedor = Proveedor::create(['nombre' => 'Proveedor por defecto']);
+            }
+
             $producto = Producto::create([
                 'categoria_id' => $validated['categoria_id'],
-                'proveedor_id' => $validated['proveedor_id'],
+                'proveedor_id' => $firstProveedor->id,
                 'nombre' => $validated['nombre'],
-                'codigo_barras' => $validated['codigo_barras'],
-                'sku' => $validated['codigo_barras'], 
-                'unidad_medida' => $validated['unidad_medida'],
-                'descripcion' => $validated['descripcion'] ?? null,
-                'precio_compra' => 0, 
-                'precio_venta' => $validated['precio'],
-                'stock_actual' => $validated['stock'],
-                'stock_minimo' => 0, 
-                'tiene_caducidad' => $validated['tiene_caducidad'] ?? false,
-                'activo' => true,
+                'sku' => $validated['sku'],
+                'precio_venta' => $validated['precio_venta'],
+                'stock_actual' => $validated['stock_actual'],
             ]);
 
-            // Crear lote si el producto llega con stock o requiere caducidad
-            if ($producto->tiene_caducidad || $producto->stock_actual > 0) {
+            // Crear lote básico si hay stock
+            if ($producto->stock_actual > 0) {
                 LoteProducto::create([
                     'producto_id' => $producto->id,
                     'numero_lote' => 'LOTE-' . date('Ymd') . '-' . $producto->id,
-                    'fecha_caducidad' => $producto->tiene_caducidad ? $validated['fecha_caducidad'] : null,
+                    'fecha_caducidad' => null,
                     'cantidad_inicial' => $producto->stock_actual,
                     'cantidad_actual' => $producto->stock_actual,
                 ]);

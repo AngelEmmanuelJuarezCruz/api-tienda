@@ -29,6 +29,28 @@ Nota: no hagas commit del archivo `database/database.sqlite`; cada equipo genera
 
 ## About Laravel
 
+## Nuevos módulos (esta rama)
+
+Se han agregado y/o actualizado los siguientes módulos orientados a la gestión de inventario y ventas:
+
+- Productos: CRUD de productos, formularios de creación/edición y manejo de stock.
+- Entradas: registro de entradas de inventario (compras a proveedores) con trazabilidad.
+- Salidas: registro de salidas (mermas, caducidad, ajustes) con justificación obligatoria.
+
+## Flujo de uso
+
+1. Iniciar sesión con una cuenta válida.
+2. Si el usuario es `dueno|administrador` accederá al panel administrativo (`/admin`).
+3. Si el usuario es `encargado` accederá a `/encargado/dashboard` y podrá gestionar `almacen > productos`, `entradas`, `salidas`.
+4. Los cajeros ven el panel de ventas (`/cajero/dashboard`) y su flujo de Punto de Venta.
+
+## Tecnologías
+
+- PHP 8.3+, Laravel (versión vendorizada en `vendor/laravel/framework`).
+- Base de datos: SQLite (local) / MySQL (producción según configuración).
+- Frontend: CSS local (public/css/style.css) con paleta corporativa: Azul Profesional `#1E3A8A` y Verde Salud `#108981`.
+
+
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
 - [Simple, fast routing engine](https://laravel.com/docs/routing).

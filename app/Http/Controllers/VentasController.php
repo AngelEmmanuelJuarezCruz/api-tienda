@@ -12,6 +12,14 @@ use Illuminate\Support\Facades\Auth;
 class VentasController extends Controller
 {
     /**
+     * Mostrar el simulador de Punto de Venta.
+     */
+    public function index(Request $request)
+    {
+        return view('admin.ventas.index');
+    }
+
+    /**
      * Almacenar una nueva venta en la base de datos (Punto de Venta)
      */
     public function store(Request $request)
