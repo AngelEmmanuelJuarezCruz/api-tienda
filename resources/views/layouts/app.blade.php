@@ -20,7 +20,7 @@
             <div class="floating-topbar">
                 <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
                     <div class="topbar-left" style="display: flex; align-items: center;">
-                        <button id="btnToggleSidebar" style="background: transparent; border: none; cursor: pointer; padding: 5px; display: flex;">
+                        <button id="btnToggleSidebar" style="background: transparent; border: none; cursor: pointer; padding: 10px; display: block; z-index: 9999; margin-right: 15px;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#1E3A8A" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
@@ -184,8 +184,10 @@
     </script>
     <script>
         document.getElementById('btnToggleSidebar').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('sidebar-collapsed');
-            document.querySelector('.main-content').classList.toggle('expanded');
+            // keep legacy behavior on documentElement and also toggle sidebar element
+            document.documentElement.classList.toggle('sidebar-collapsed');
+            var el = document.getElementById('sidebar'); if(el) el.classList.toggle('sidebar-collapsed');
+            var main = document.querySelector('.main-content'); if(main) main.classList.toggle('expanded');
         });
     </script>
 </body>
