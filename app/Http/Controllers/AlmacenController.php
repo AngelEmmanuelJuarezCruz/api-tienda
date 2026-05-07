@@ -8,6 +8,7 @@ use App\Models\Categoria;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AlmacenController extends Controller
 {
@@ -29,6 +30,7 @@ class AlmacenController extends Controller
             'sku' => 'required|string|max:100|unique:productos,sku',
             'precio_venta' => 'required|numeric|min:0',
             'stock_actual' => 'required|integer|min:0',
+            'imagen' => 'nullable|image|max:4096',
         ]);
 
         try {
@@ -42,6 +44,11 @@ class AlmacenController extends Controller
                 $firstProveedor = Proveedor::create(['nombre' => 'Proveedor por defecto']);
             }
 
+            $imagenPath = null;
+            if ($request->hasFile('imagen')) {
+                $imagenPath = $request->file('imagen')->store('productos', 'public');
+            }
+
             $producto = Producto::create([
                 'categoria_id' => $validated['categoria_id'],
                 'proveedor_id' => $firstProveedor->id,
@@ -49,6 +56,7 @@ class AlmacenController extends Controller
                 'sku' => $validated['sku'],
                 'precio_venta' => $validated['precio_venta'],
                 'stock_actual' => $validated['stock_actual'],
+                'imagen_path' => $imagenPath,
             ]);
 
             // Crear lote básico si hay stock
@@ -89,10 +97,20 @@ class AlmacenController extends Controller
             'unidad_medida' => 'nullable|in:pieza,caja,kilo,metro',
             'tiene_caducidad' => 'boolean',
             'fecha_caducidad' => 'nullable|date|required_if:tiene_caducidad,true',
+            'imagen' => 'nullable|image|max:4096',
         ]);
 
         try {
             DB::beginTransaction();
+
+            $imagenPath = $producto->imagen_path;
+            if ($request->hasFile('imagen')) {
+                if ($producto->imagen_path) {
+                    Storage::disk('public')->delete($producto->imagen_path);
+                }
+
+                $imagenPath = $request->file('imagen')->store('productos', 'public');
+            }
 
             $producto->update([
                 'categoria_id' => $validated['categoria_id'] ?? $producto->categoria_id,
@@ -104,6 +122,7 @@ class AlmacenController extends Controller
                 'precio_venta' => $validated['precio'],
                 'tiene_caducidad' => $validated['tiene_caducidad'] ?? false,
                 'stock_actual' => $validated['stock'],
+                'imagen_path' => $imagenPath,
             ]);
 
             if ($producto->tiene_caducidad && isset($validated['fecha_caducidad'])) {

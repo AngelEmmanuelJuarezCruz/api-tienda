@@ -20,6 +20,11 @@ class CategoriaSeeder extends Seeder
             'Material de Curacion',
             'EPP',
             'Desinfectantes',
+            'Ortopedia y Movilidad',
+            'Rehabilitacion',
+            'Equipos Respiratorios',
+            'Audicion y Comunicacion',
+            'Cuidado Domiciliario',
         ];
 
         foreach ($categorias as $nombre) {
