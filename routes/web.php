@@ -80,4 +80,6 @@ Route::middleware(['auth', 'role:cajero'])->prefix('cajero')->group(function () 
 
     // Punto de venta para cajeros (reutiliza el controlador de Ventas)
     Route::get('/ventas', [VentasController::class, 'index'])->name('cajero.ventas.index');
+    Route::post('/ventas/search', [VentasController::class, 'search'])->name('cajero.ventas.search');
+    Route::post('/ventas/store', [VentasController::class, 'store'])->name('cajero.ventas.store');
 });

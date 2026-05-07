@@ -16,7 +16,36 @@ class VentasController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.ventas.index');
+        return view('cajero.ventas.index');
+    }
+
+    /**
+     * Buscar productos por SKU o nombre (AJAX)
+     */
+    public function search(Request $request)
+    {
+        $query = $request->get('q', '');
+        
+        $productos = Producto::where('activo', true)
+            ->where(function ($q) use ($query) {
+                $q->where('nombre', 'like', "%{$query}%")
+                  ->orWhere('sku', 'like', "%{$query}%");
+            })
+            ->with('categoria')
+            ->limit(20)
+            ->get()
+            ->map(function ($p) {
+                return [
+                    'id' => $p->id,
+                    'nombre' => $p->nombre,
+                    'sku' => $p->sku,
+                    'precio_venta' => (float) $p->precio_venta,
+                    'stock_actual' => (int) $p->stock_actual,
+                    'categoria' => $p->categoria?->nombre ?? 'Sin categoría',
+                ];
+            });
+
+        return response()->json($productos);
     }
 
     /**
@@ -94,11 +123,19 @@ class VentasController extends Controller
                     ]);
                 }
 
-                return redirect()->route('ventas.dashboard')->with('success', 'Venta registrada con éxito bajo folio: ' . $folio);
+                return response()->json([
+                    'success' => true,
+                    'folio' => $folio,
+                    'total' => $total,
+                    'message' => 'Venta registrada con éxito'
+                ]);
             });
         } catch (\Exception $e) {
             // Regresar al cliente con el mensaje de invalidación de inventario o error interno
-            return back()->withInput()->withErrors(['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 422);
         }
     }
 }
