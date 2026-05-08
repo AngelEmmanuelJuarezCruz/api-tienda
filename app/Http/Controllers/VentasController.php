@@ -29,7 +29,10 @@ class VentasController extends Controller
         $productos = Producto::where('activo', true)
             ->where(function ($q) use ($query) {
                 $q->where('nombre', 'like', "%{$query}%")
-                  ->orWhere('sku', 'like', "%{$query}%");
+                  ->orWhere('sku', 'like', "%{$query}%")
+                  ->orWhereHas('categoria', function($qCat) use ($query) {
+                      $qCat->where('nombre', 'like', "%{$query}%");
+                  });
             })
             ->with('categoria')
             ->limit(20)

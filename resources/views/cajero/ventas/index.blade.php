@@ -14,11 +14,16 @@
                     Buscar producto
                 </label>
                 <div class="relative mb-4">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
                     <input 
                         id="pos-search" 
                         type="text" 
-                        placeholder="Ej: Arroz, SKU-001..." 
-                        class="w-full px-4 py-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white font-semibold"
+                        placeholder="Buscar por Nombre, SKU o Categoría..." 
+                        class="w-full pl-10 pr-4 py-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white font-semibold"
                         autocomplete="off"
                     >
                     <div id="search-results" class="absolute top-full left-0 right-0 bg-white border-2 border-gray-400 rounded-lg mt-1 max-h-64 overflow-y-auto z-50 hidden shadow-2xl" style="background-color: rgba(255, 255, 255, 1) !important;"></div>
@@ -183,10 +188,19 @@ posSearch.addEventListener('input', async (e) => {
         }
 
         searchResults.innerHTML = productos.map(p => `
-            <div class="px-4 py-3 hover:bg-blue-100 cursor-pointer border-b last:border-b-0 transition bg-white" data-producto-id="${p.id}" style="background-color: white !important;">
-                <div class="font-bold text-gray-900">${p.nombre}</div>
-                <div class="text-xs text-gray-700 font-semibold">SKU: ${p.sku} | Stock: ${p.stock_actual}</div>
-                <div class="text-sm font-bold text-blue-700">$${p.precio_venta.toFixed(2)}</div>
+            <div class="px-4 py-3 hover:bg-blue-50 cursor-pointer border-b last:border-b-0 transition bg-white" data-producto-id="${p.id}">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="font-bold text-gray-900 text-base">${p.nombre}</div>
+                        <div class="text-xs text-gray-600 mt-1 font-medium">SKU: ${p.sku} <span class="mx-1 text-gray-300">•</span> <span class="bg-gray-100 px-2 py-0.5 rounded text-gray-700 border border-gray-200">${p.categoria}</span></div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-lg font-bold text-blue-700 leading-none">$${p.precio_venta.toFixed(2)}</div>
+                        <div class="text-xs font-bold mt-1 ${p.stock_actual > 0 ? 'text-green-600 bg-green-50 px-2 rounded border border-green-200' : 'text-red-600 bg-red-50 px-2 rounded border border-red-200'}">
+                            ${p.stock_actual} en stock
+                        </div>
+                    </div>
+                </div>
             </div>
         `).join('');
 

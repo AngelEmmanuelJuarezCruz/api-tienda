@@ -35,6 +35,9 @@ Route::middleware(['auth', 'role:dueno,administrador'])->prefix('admin')->group(
     // Proveedores - solo accesible por Dueño/Administrador
     Route::middleware(['role:dueno,administrador'])->group(function () {
         Route::get('/proveedores', [ProveedoresController::class, 'index'])->name('admin.proveedores.index');
+        Route::post('/proveedores', [ProveedoresController::class, 'store'])->name('admin.proveedores.store');
+        Route::put('/proveedores/{proveedor}', [ProveedoresController::class, 'update'])->name('admin.proveedores.update');
+        Route::delete('/proveedores/{proveedor}', [ProveedoresController::class, 'destroy'])->name('admin.proveedores.destroy');
     });
 });
 
