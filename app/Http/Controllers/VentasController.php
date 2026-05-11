@@ -16,25 +16,39 @@ class VentasController extends Controller
      */
     public function index(Request $request)
     {
-        $user = Auth::user();
-        $productos = Producto::query()
-            ->activos()
-            ->with(['categoria', 'proveedor'])
-            ->orderBy('nombre')
-            ->limit(6)
-            ->get();
+        return view('cajero.ventas.index');
+    }
 
-        $ticketItems = $this->buildTicketItems($productos);
-        $subtotal = collect($ticketItems)->sum('subtotal');
-        $iva = round($subtotal * 0.16, 2);
-        $total = round($subtotal + $iva, 2);
-        $storeRoute = $user && $user->rol === 'cajero' ? 'cajero.ventas.store' : 'admin.ventas.store';
+    /**
+     * Buscar productos por SKU o nombre (AJAX)
+     */
+    public function search(Request $request)
+    {
+        $query = $request->get('q', '');
+        
+        $productos = Producto::where('activo', true)
+            ->where(function ($q) use ($query) {
+                $q->where('nombre', 'like', "%{$query}%")
+                  ->orWhere('sku', 'like', "%{$query}%")
+                  ->orWhereHas('categoria', function($qCat) use ($query) {
+                      $qCat->where('nombre', 'like', "%{$query}%");
+                  });
+            })
+            ->with('categoria')
+            ->limit(20)
+            ->get()
+            ->map(function ($p) {
+                return [
+                    'id' => $p->id,
+                    'nombre' => $p->nombre,
+                    'sku' => $p->sku,
+                    'precio_venta' => (float) $p->precio_venta,
+                    'stock_actual' => (int) $p->stock_actual,
+                    'categoria' => $p->categoria?->nombre ?? 'Sin categoría',
+                ];
+            });
 
-        if ($user && $user->rol === 'cajero') {
-            return view('cajero.ventas.index', compact('productos', 'ticketItems', 'subtotal', 'iva', 'total', 'storeRoute'));
-        }
-
-        return view('admin.ventas.index', compact('productos', 'ticketItems', 'subtotal', 'iva', 'total', 'storeRoute'));
+        return response()->json($productos);
     }
 
     /**
@@ -112,45 +126,19 @@ class VentasController extends Controller
                     ]);
                 }
 
-                return redirect()->route($this->ventasIndexRoute())->with('success', 'Venta registrada con éxito bajo folio: ' . $folio);
+                return response()->json([
+                    'success' => true,
+                    'folio' => $folio,
+                    'total' => $total,
+                    'message' => 'Venta registrada con éxito'
+                ]);
             });
         } catch (\Exception $e) {
             // Regresar al cliente con el mensaje de invalidación de inventario o error interno
-            return back()->withInput()->withErrors(['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 422);
         }
-    }
-
-    private function ventasIndexRoute(): string
-    {
-        $user = Auth::user();
-
-        if ($user && $user->rol === 'cajero') {
-            return 'cajero.ventas.index';
-        }
-
-        return 'admin.ventas.index';
-    }
-
-    /**
-     * Build a small sample ticket from the available catalog.
-     */
-    private function buildTicketItems($productos): array
-    {
-        return $productos
-            ->take(2)
-            ->values()
-            ->map(function (Producto $producto, int $index) {
-                $cantidad = $index === 0 ? 1 : 2;
-                $precioUnitario = (float) $producto->precio_venta;
-
-                return [
-                    'producto_id' => $producto->id,
-                    'nombre' => $producto->nombre,
-                    'cantidad' => $cantidad,
-                    'precio_unitario' => $precioUnitario,
-                    'subtotal' => round($precioUnitario * $cantidad, 2),
-                ];
-            })
-            ->all();
     }
 }

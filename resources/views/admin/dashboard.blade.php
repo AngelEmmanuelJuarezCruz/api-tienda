@@ -8,7 +8,7 @@
     $productos_bajos = \App\Models\Producto::whereColumn('stock_actual', '<', 'stock_minimo')->count();
     $total_usuarios = \App\Models\User::count();
 @endphp
-<div class="min-h-screen p-6" style="background: transparent;">
+<div class="px-6 py-4" style="background: transparent;">
     <div class="max-w-7xl mx-auto">
         <h1 class="text-2xl font-semibold text-gray-800 mb-6" style="font-family: 'Poppins', sans-serif;">Gestión de Insumos Médicos</h1>
 

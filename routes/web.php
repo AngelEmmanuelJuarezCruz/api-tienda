@@ -35,13 +35,15 @@ Route::middleware(['auth', 'role:dueno,administrador'])->prefix('admin')->group(
     // Proveedores - solo accesible por Dueño/Administrador
     Route::middleware(['role:dueno,administrador'])->group(function () {
         Route::get('/proveedores', [ProveedoresController::class, 'index'])->name('admin.proveedores.index');
+        Route::post('/proveedores', [ProveedoresController::class, 'store'])->name('admin.proveedores.store');
+        Route::put('/proveedores/{proveedor}', [ProveedoresController::class, 'update'])->name('admin.proveedores.update');
+        Route::delete('/proveedores/{proveedor}', [ProveedoresController::class, 'destroy'])->name('admin.proveedores.destroy');
     });
 });
 
 // Ventas: movida bajo /admin y accesible para el Dueño
 Route::middleware(['auth', 'role:dueno'])->prefix('admin')->group(function () {
     Route::get('/ventas', [VentasController::class, 'index'])->name('admin.ventas.index');
-    Route::post('/ventas', [VentasController::class, 'store'])->name('admin.ventas.store');
     // Usuarios - acceso exclusivo del Dueño
     Route::get('/usuarios', [UsuariosController::class, 'index'])->name('admin.usuarios.index');
     // Reportes - panel de inteligencia (Dueño)
@@ -81,5 +83,6 @@ Route::middleware(['auth', 'role:cajero'])->prefix('cajero')->group(function () 
 
     // Punto de venta para cajeros (reutiliza el controlador de Ventas)
     Route::get('/ventas', [VentasController::class, 'index'])->name('cajero.ventas.index');
-    Route::post('/ventas', [VentasController::class, 'store'])->name('cajero.ventas.store');
+    Route::post('/ventas/search', [VentasController::class, 'search'])->name('cajero.ventas.search');
+    Route::post('/ventas/store', [VentasController::class, 'store'])->name('cajero.ventas.store');
 });
