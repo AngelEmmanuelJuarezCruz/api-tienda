@@ -46,8 +46,14 @@ Route::middleware(['auth', 'role:dueno'])->prefix('admin')->group(function () {
     Route::get('/ventas', [VentasController::class, 'index'])->name('admin.ventas.index');
     // Usuarios - acceso exclusivo del Dueño
     Route::get('/usuarios', [UsuariosController::class, 'index'])->name('admin.usuarios.index');
+    Route::post('/usuarios', [UsuariosController::class, 'store'])->name('admin.usuarios.store');
     // Reportes - panel de inteligencia (Dueño)
     Route::get('/reportes', [ReportesController::class, 'index'])->name('admin.reportes.index');
+    Route::post('/reportes/export', [ReportesController::class, 'export'])->name('admin.reportes.export');
+    Route::get('/reportes/export', function () {
+        return redirect()->route('admin.reportes.index')
+            ->with('warning', 'Usa el boton de descarga para exportar el reporte.');
+    })->name('admin.reportes.export.get');
 });
 Route::get('/encargado/dashboard', function () {
     return view('encargado.dashboard');

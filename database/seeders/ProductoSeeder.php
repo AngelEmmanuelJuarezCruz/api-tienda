@@ -38,6 +38,21 @@ class ProductoSeeder extends Seeder
         $categoriaIds = DB::table('categorias')->pluck('id', 'nombre');
         $proveedorIds = DB::table('proveedores')->pluck('id', 'nombre');
 
+        $imagenes = [
+            'productos/linahp-01.webp',
+            'productos/linahp-02.webp',
+            'productos/linahp-03.webp',
+            'productos/linahp-04.webp',
+            'productos/linahp-05.webp',
+            'productos/linahp-06.webp',
+            'productos/linahp-07.webp',
+            'productos/linahp-08.webp',
+            'productos/linahp-09.webp',
+            'productos/linahp-10.webp',
+            'productos/linahp-11.webp',
+            'productos/linahp-12.webp',
+        ];
+
         $productos = [
             [
                 'categoria' => 'EPP',
@@ -288,7 +303,8 @@ class ProductoSeeder extends Seeder
             ],
         ];
 
-        foreach ($productos as $producto) {
+        foreach ($productos as $index => $producto) {
+            $imagenPath = $producto['imagen_path'] ?? $imagenes[$index % count($imagenes)];
             DB::table('productos')->updateOrInsert(
                 ['sku' => $producto['sku']],
                 [
@@ -298,7 +314,7 @@ class ProductoSeeder extends Seeder
                     'codigo_barras' => $producto['codigo_barras'] ?? null,
                     'unidad_medida' => $producto['unidad_medida'] ?? 'pieza',
                     'fecha_caducidad' => $producto['tiene_caducidad'] ? now()->addMonths(18)->toDateString() : null,
-                    'imagen_path' => null,
+                    'imagen_path' => $imagenPath,
                     'descripcion' => null,
                     'precio_compra' => $producto['precio_compra'],
                     'precio_venta' => $producto['precio_venta'],

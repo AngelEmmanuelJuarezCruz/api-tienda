@@ -7,13 +7,13 @@
     <title>Gestión de Insumos Médicos</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #F2F4F7; }
+        body { font-family: 'Manrope', sans-serif; }
         .sidebar-item { transition: all 0.2s ease-in-out; }
-        .sidebar-item:hover, .sidebar-item.active { background-color: rgba(255, 255, 255, 0.1); border-left: 4px solid #34D399; }
-        .sidebar-item.active { background-color: rgba(255, 255, 255, 0.15); border-left: 4px solid #10B981; }
+        .sidebar-item:hover, .sidebar-item.active { background-color: rgba(255, 255, 255, 0.1); border-left: 4px solid #f1a65c; }
+        .sidebar-item.active { background-color: rgba(255, 255, 255, 0.15); border-left: 4px solid #f0852b; }
         
         /* Sistema de dimensiones del Sidebar */
         #sidebar { width: 260px; }
@@ -31,7 +31,7 @@
         .sidebar-collapsed .sidebar-item svg { margin-left: 0; margin-right: 0; }
     </style>
 </head>
-<body class="text-gray-800 antialiased overflow-x-hidden">
+    <body class="text-gray-800 antialiased overflow-x-hidden">
 
     {{-- 1. SIDEBAR (MENÚ LATERAL AZUL) --}}
     <aside id="sidebar" class="fixed top-0 left-0 h-screen bg-[#1E3A8A] text-white z-50 flex flex-col transition-all duration-300 overflow-x-hidden overflow-y-auto shadow-xl">

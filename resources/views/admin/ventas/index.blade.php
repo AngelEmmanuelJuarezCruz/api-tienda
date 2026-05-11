@@ -3,7 +3,7 @@
 @section('title', 'Ventas')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" style="background:#F2F4F7; font-family: 'Poppins', sans-serif;">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
     <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-semibold text-gray-800">Punto de Venta - Simulador</h1>
@@ -26,7 +26,7 @@
                                 <p class="text-sm text-gray-500">${{ number_format((float) $producto->precio_venta, 2) }}</p>
                             </div>
                             <div class="mt-3">
-                                <button type="button" class="w-full bg-[#1E3A8A] text-white px-3 py-2 rounded">Añadir</button>
+                                <button type="button" class="btn btn-secondary w-full justify-center">Añadir</button>
                             </div>
                         </div>
                     @empty
@@ -71,7 +71,7 @@
                         <span>${{ number_format($total, 2) }}</span>
                     </div>
 
-                    <button type="submit" class="mt-4 w-full bg-[#108981] text-white py-3 rounded text-lg">Finalizar Venta</button>
+                    <button type="submit" class="mt-4 w-full btn btn-primary justify-center">Finalizar venta</button>
                 </div>
             </form>
         </div>

@@ -60,14 +60,14 @@
                 <div class="mt-6 space-y-2">
                     <button 
                         id="btn-cobrar" 
-                        class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        class="w-full btn btn-primary justify-center disabled:opacity-60 disabled:cursor-not-allowed"
                         disabled
                     >
                         Cobrar
                     </button>
                     <button 
                         id="btn-limpiar" 
-                        class="w-full bg-gray-400 text-white py-2 rounded-lg font-semibold hover:bg-gray-500 transition"
+                        class="w-full btn btn-ghost justify-center"
                     >
                         Limpiar
                     </button>
@@ -108,14 +108,14 @@
         <div class="space-y-2">
             <button 
                 id="btn-confirmar-pago" 
-                class="w-full bg-green-600 text-white py-2 text-sm rounded-lg font-semibold hover:bg-green-700 transition disabled:bg-gray-400"
+                class="w-full btn btn-primary justify-center disabled:opacity-60"
                 disabled
             >
-                Confirmar Venta
+                Confirmar venta
             </button>
             <button 
                 id="btn-cancelar-pago" 
-                class="w-full bg-gray-400 text-white py-2 text-sm rounded-lg font-semibold hover:bg-gray-500 transition"
+                class="w-full btn btn-ghost justify-center"
             >
                 Cancelar
             </button>
@@ -132,9 +132,9 @@
         <p class="text-gray-700 mb-6 font-semibold" id="total-venta">Total: $0.00</p>
         <button 
             id="btn-nuevo-ticket" 
-            class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+            class="w-full btn btn-secondary justify-center"
         >
-            Nuevo Ticket
+            Nuevo ticket
         </button>
     </div>
 </div>

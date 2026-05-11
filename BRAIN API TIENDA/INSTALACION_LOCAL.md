@@ -92,6 +92,9 @@ Si ves los números correctos, ¡todo OK! ✅
 | encargado@apitienda.local | password123 | Encargado |
 | cajero@apitienda.local | password123 | Cajero |
 
+para ejecutar el vite y diseño pon terminal cd api-tienda 
+npm.cmd run dev
+
 *(Actualizado según el seeder actual)*
 
 ---
