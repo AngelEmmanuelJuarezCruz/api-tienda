@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         body { font-family: 'Poppins', sans-serif; background-color: #F2F4F7; }
@@ -128,6 +129,35 @@
             <a href="{{ in_array($role, ['dueno','administrador']) ? route('admin.ventas.index') : route('cajero.ventas.index') }}" class="sidebar-item {{ request()->routeIs('*.ventas.*') ? 'active' : '' }} flex items-center px-6 py-3 border-l-4 border-transparent text-gray-200">
                 <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V6m0 12v-2M3 21h18"/></svg>
                 <span class="menu-text ml-4 font-medium tracking-wide">Punto de Venta</span>
+            </a>
+            @endif
+
+            {{-- SECCIÓN: GESTIÓN DE CAJA (Solo Cajero) --}}
+            @if($role === 'cajero')
+            <div class="px-6 py-2 mt-4 text-[10px] font-bold text-blue-300/70 uppercase tracking-widest menu-section whitespace-nowrap">Gestión de Caja</div>
+            
+            @php
+                $turnoAbierto = \App\Models\TurnoCaja::where('usuario_id', Auth::id())->where('estado', 'Abierto')->exists();
+            @endphp
+            
+            <a href="{{ route('cajero.caja.index') }}" class="sidebar-item {{ request()->routeIs('cajero.caja.*') ? 'active' : '' }} flex items-center justify-between px-6 py-3 border-l-4 border-transparent text-gray-200">
+                <div class="flex items-center">
+                    <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    <span class="menu-text ml-4 font-medium tracking-wide">Control de Turno</span>
+                </div>
+                <div class="flex items-center justify-center menu-text">
+                    @if($turnoAbierto)
+                        <span class="flex w-2.5 h-2.5 bg-emerald-400 rounded-full shadow-[0_0_8px_rgba(52,211,153,0.8)]" title="Caja Abierta"></span>
+                    @else
+                        <span class="flex w-2.5 h-2.5 bg-red-400 rounded-full shadow-[0_0_8px_rgba(248,113,113,0.8)]" title="Caja Cerrada"></span>
+                    @endif
+                </div>
+            </a>
+            
+            <!-- Enlace directo al mismo panel (sección gastos) -->
+            <a href="{{ route('cajero.caja.index') }}" class="sidebar-item flex items-center px-6 py-2 border-l-4 border-transparent text-gray-300 hover:text-white pl-12 menu-text">
+                <svg class="w-4 h-4 shrink-0 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                <span class="ml-3 text-sm tracking-wide">Registrar Gasto</span>
             </a>
             @endif
 

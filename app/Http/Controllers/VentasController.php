@@ -20,6 +20,41 @@ class VentasController extends Controller
     }
 
     /**
+     * Búsqueda ultra rápida de productos (AJAX - GET)
+     */
+    public function buscarProductos(Request $request)
+    {
+        $query = $request->get('q', '');
+        
+        if (strlen($query) < 2) {
+            return response()->json([]);
+        }
+
+        $productos = Producto::where('activo', true)
+            ->where(function ($q) use ($query) {
+                $q->where('nombre', 'like', "%{$query}%")
+                  ->orWhere('sku', 'like', "%{$query}%")
+                  ->orWhere('codigo_barras', 'like', "%{$query}%");
+            })
+            ->with('categoria')
+            ->limit(15)
+            ->get()
+            ->map(function ($p) {
+                return [
+                    'id' => $p->id,
+                    'nombre' => $p->nombre,
+                    'sku' => $p->sku,
+                    'codigo_barras' => $p->codigo_barras,
+                    'precio_venta' => (float) $p->precio_venta,
+                    'stock_actual' => (int) $p->stock_actual,
+                    'categoria' => $p->categoria?->nombre ?? 'Sin categoría',
+                ];
+            });
+
+        return response()->json($productos);
+    }
+
+    /**
      * Buscar productos por SKU o nombre (AJAX)
      */
     public function search(Request $request)
@@ -69,6 +104,15 @@ class VentasController extends Controller
                 $user = Auth::user();
                 $esAdministrador = $user->rol === 'administrador'; // Regla estricta
 
+                // Validar turno abierto
+                $turnoActual = \App\Models\TurnoCaja::where('usuario_id', $user->id)
+                                        ->where('estado', 'Abierto')
+                                        ->first();
+
+                if (!$esAdministrador && !$turnoActual) {
+                    throw new \Exception("Debes abrir turno para poder cobrar.");
+                }
+
                 $total = 0;
                 $detalles = [];
 
@@ -104,6 +148,10 @@ class VentasController extends Controller
                     ];
                 }
 
+                // Aplicar IVA (ejemplo: si las ventas son subtotal + IVA o ya vienen con IVA).
+                // Considerando que el carrito calculó 16% extra:
+                $totalConIva = $total * 1.16;
+
                 // Generar un folio irrepetible
                 $folio = 'VNT-' . date('Ymd') . '-' . strtoupper(uniqid());
 
@@ -111,7 +159,7 @@ class VentasController extends Controller
                 $venta = Venta::create([
                     'usuario_id' => $user->id,
                     'folio' => $folio,
-                    'total' => $total,
+                    'total' => $totalConIva,
                     'fecha' => now(),
                 ]);
 
@@ -126,10 +174,17 @@ class VentasController extends Controller
                     ]);
                 }
 
+                // Sumar los ingresos al turno activo actual si existe (el admin podría no usar turno)
+                if ($turnoActual) {
+                    $turnoActual->ingresos_ventas += $totalConIva;
+                    $turnoActual->efectivo_esperado = $turnoActual->fondo_inicial + $turnoActual->ingresos_ventas - $turnoActual->gastos;
+                    $turnoActual->save();
+                }
+
                 return response()->json([
                     'success' => true,
                     'folio' => $folio,
-                    'total' => $total,
+                    'total' => $totalConIva,
                     'message' => 'Venta registrada con éxito'
                 ]);
             });

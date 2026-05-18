@@ -26,6 +26,7 @@ class Producto extends Model
         'stock_actual',
         'stock_minimo',
         'tiene_caducidad',
+        'fecha_caducidad',
         'activo',
     ];
 
@@ -36,6 +37,7 @@ class Producto extends Model
             'precio_venta' => 'decimal:2',
             'tiene_caducidad' => 'boolean',
             'activo' => 'boolean',
+            'fecha_caducidad' => 'date',
         ];
     }
 

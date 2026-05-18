@@ -23,6 +23,16 @@
         </div>
 
         <div class="form-group">
+            <label class="form-label">Proveedor</label>
+            <select class="form-input" name="proveedor_id" required>
+                <option value="">Seleccione un proveedor</option>
+                @foreach($proveedores as $proveedor)
+                    <option value="{{ $proveedor->id }}" @selected(old('proveedor_id', $producto->proveedor_id) == $proveedor->id)>{{ $proveedor->nombre }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="form-group">
             <label class="form-label">Precio</label>
             <input class="form-input" type="number" step="0.01" name="precio" value="{{ old('precio',$producto->precio_venta) }}" required>
         </div>
@@ -30,6 +40,11 @@
         <div class="form-group">
             <label class="form-label">Stock</label>
             <input class="form-input" type="number" name="stock" value="{{ old('stock',$producto->stock_actual) }}" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Fecha de Caducidad</label>
+            <input class="form-input" type="date" name="fecha_caducidad" value="{{ old('fecha_caducidad', $producto->fecha_caducidad) }}">
         </div>
 
         <button class="btn-primary" type="submit">Actualizar</button>

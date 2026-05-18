@@ -61,8 +61,8 @@ class ProveedoresController extends Controller
     public function destroy(Proveedor $proveedor)
     {
         // Validación para evitar borrar proveedores con dependencias operativas
-        if ($proveedor->productos()->count() > 0) {
-            return redirect()->route('admin.proveedores.index')->withErrors(['error' => 'No puedes eliminar este proveedor porque tiene productos vinculados en el catálogo.']);
+        if ($proveedor->productos()->exists()) {
+            return redirect()->back()->with('error', 'No se puede eliminar este proveedor porque tiene insumos médicos asociados al inventario.');
         }
 
         $proveedor->delete();

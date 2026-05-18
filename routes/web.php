@@ -21,6 +21,12 @@ Route::get('/login', function () {
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Rutas compartidas de POS (Accesible por admin y cajero)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/pos/buscar-productos', [VentasController::class, 'buscarProductos'])->name('pos.buscar-productos');
+    Route::post('/pos/cobrar', [VentasController::class, 'store'])->name('pos.cobrar');
+});
+
 // Grupos de rutas protegidos por inicio de sesión (auth) y perfil de seguridad (role)
 Route::middleware(['auth', 'role:dueno,administrador'])->prefix('admin')->group(function () {
     Route::get('/', function () {
@@ -46,8 +52,9 @@ Route::middleware(['auth', 'role:dueno'])->prefix('admin')->group(function () {
     Route::get('/ventas', [VentasController::class, 'index'])->name('admin.ventas.index');
     // Usuarios - acceso exclusivo del Dueño
     Route::get('/usuarios', [UsuariosController::class, 'index'])->name('admin.usuarios.index');
-    // Reportes - panel de inteligencia (Dueño)
+    // Reportes - panel de inteligencia (Dueño y Admin)
     Route::get('/reportes', [ReportesController::class, 'index'])->name('admin.reportes.index');
+    Route::put('/reportes/caja/{id}/ajustar', [ReportesController::class, 'ajustarCorte'])->name('admin.reportes.ajustar');
 });
 Route::get('/encargado/dashboard', function () {
     return view('encargado.dashboard');
@@ -62,7 +69,8 @@ Route::middleware(['auth', 'role:encargado,dueno,administrador'])->prefix('almac
     Route::get('/productos', [\App\Http\Controllers\Admin\AlmacenController::class, 'index'])->name('almacen.productos');
     Route::get('/productos/create', [\App\Http\Controllers\AlmacenController::class, 'create'])->name('almacen.productos.create');
     Route::post('/productos', [\App\Http\Controllers\AlmacenController::class, 'store'])->name('almacen.productos.store');
-    Route::get('/productos/{producto}/edit', function($producto){ $p = \App\Models\Producto::findOrFail($producto); return view('admin.almacen.edit', ['producto'=>$p]); })->name('almacen.productos.edit');
+    Route::get('/productos/{producto}', [\App\Http\Controllers\AlmacenController::class, 'show'])->name('almacen.productos.show');
+    Route::get('/productos/{producto}/edit', [\App\Http\Controllers\AlmacenController::class, 'edit'])->name('almacen.productos.edit');
     Route::put('/productos/{producto}', [\App\Http\Controllers\AlmacenController::class, 'update'])->name('almacen.productos.update');
     Route::delete('/productos/{producto}', [\App\Http\Controllers\AlmacenController::class, 'destroy'])->name('almacen.productos.destroy');
 
@@ -80,6 +88,12 @@ Route::middleware(['auth', 'role:cajero'])->prefix('cajero')->group(function () 
     Route::get('/', function () {
         return view('cajero.dashboard');
     })->name('cajero.dashboard');
+
+    // Control de Caja y Turnos
+    Route::get('/caja', [\App\Http\Controllers\CajaController::class, 'index'])->name('cajero.caja.index');
+    Route::post('/caja/abrir', [\App\Http\Controllers\CajaController::class, 'abrir'])->name('cajero.caja.abrir');
+    Route::post('/caja/gasto', [\App\Http\Controllers\CajaController::class, 'registrarGasto'])->name('cajero.caja.gasto');
+    Route::post('/caja/cerrar', [\App\Http\Controllers\CajaController::class, 'cerrar'])->name('cajero.caja.cerrar');
 
     // Punto de venta para cajeros (reutiliza el controlador de Ventas)
     Route::get('/ventas', [VentasController::class, 'index'])->name('cajero.ventas.index');
