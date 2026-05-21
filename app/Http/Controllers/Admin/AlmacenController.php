@@ -10,7 +10,11 @@ class AlmacenController extends Controller
 {
     public function index(Request $request)
     {
-        $productos = Producto::with(['categoria', 'bitacoraMovimientosStock'])->get();
+        $productos = Producto::activos()
+            ->with(['categoria', 'proveedor', 'bitacoraMovimientosStock'])
+            ->orderBy('nombre')
+            ->get();
+
         return view('admin.almacen.index', compact('productos'));
     }
 }

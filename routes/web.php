@@ -8,6 +8,7 @@ use App\Http\Controllers\VentasController;
 use App\Http\Controllers\Admin\UsuariosController;
 use App\Http\Controllers\Admin\ReportesController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -29,9 +30,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Grupos de rutas protegidos por inicio de sesión (auth) y perfil de seguridad (role)
 Route::middleware(['auth', 'role:dueno,administrador'])->prefix('admin')->group(function () {
-    Route::get('/', function () {
-        return view('admin.dashboard');
-    })->name('admin.index');
+    Route::get('/', [DashboardController::class, 'admin'])->name('admin.index');
 
     // Almacén - accesible a encargado y roles administrativos
     Route::middleware(['role:encargado,dueno,administrador'])->group(function () {
@@ -45,16 +44,19 @@ Route::middleware(['auth', 'role:dueno,administrador'])->prefix('admin')->group(
         Route::put('/proveedores/{proveedor}', [ProveedoresController::class, 'update'])->name('admin.proveedores.update');
         Route::delete('/proveedores/{proveedor}', [ProveedoresController::class, 'destroy'])->name('admin.proveedores.destroy');
     });
+
+    // Reportes - panel de inteligencia (Dueno y Admin)
+    Route::get('/reportes', [ReportesController::class, 'index'])->name('admin.reportes.index');
+    Route::get('/reportes/exportar', [ReportesController::class, 'export'])->name('admin.reportes.export');
+    Route::put('/reportes/caja/{id}/ajustar', [ReportesController::class, 'ajustarCorte'])->name('admin.reportes.ajustar');
+    Route::get('/ventas', [VentasController::class, 'index'])->name('admin.ventas.index');
 });
 
 // Ventas: movida bajo /admin y accesible para el Dueño
 Route::middleware(['auth', 'role:dueno'])->prefix('admin')->group(function () {
-    Route::get('/ventas', [VentasController::class, 'index'])->name('admin.ventas.index');
     // Usuarios - acceso exclusivo del Dueño
     Route::get('/usuarios', [UsuariosController::class, 'index'])->name('admin.usuarios.index');
-    // Reportes - panel de inteligencia (Dueño y Admin)
-    Route::get('/reportes', [ReportesController::class, 'index'])->name('admin.reportes.index');
-    Route::put('/reportes/caja/{id}/ajustar', [ReportesController::class, 'ajustarCorte'])->name('admin.reportes.ajustar');
+    Route::post('/usuarios', [UsuariosController::class, 'store'])->name('admin.usuarios.store');
 });
 Route::get('/encargado/dashboard', function () {
     return view('encargado.dashboard');
@@ -75,11 +77,22 @@ Route::middleware(['auth', 'role:encargado,dueno,administrador'])->prefix('almac
     Route::delete('/productos/{producto}', [\App\Http\Controllers\AlmacenController::class, 'destroy'])->name('almacen.productos.destroy');
 
     // Entradas
-    Route::get('/entradas', function(){ $movimientos = \App\Models\EntradaInventario::with('producto','proveedor')->latest()->limit(50)->get(); return view('almacen.entradas', compact('movimientos')); })->name('almacen.entradas');
+    Route::get('/entradas', function(){
+        $productos = \App\Models\Producto::activos()->orderBy('nombre')->get();
+        $proveedores = \App\Models\Proveedor::orderBy('nombre')->get();
+        $movimientos = \App\Models\EntradaInventario::with('producto','proveedor')->latest()->limit(50)->get();
+
+        return view('almacen.entradas', compact('movimientos', 'productos', 'proveedores'));
+    })->name('almacen.entradas');
     Route::post('/entradas', [\App\Http\Controllers\EntradasController::class, 'store'])->name('almacen.entradas.store');
 
     // Salidas
-    Route::get('/salidas', function(){ $movimientos = \App\Models\SalidaInventario::with('producto')->latest()->limit(50)->get(); return view('almacen.salidas', compact('movimientos')); })->name('almacen.salidas');
+    Route::get('/salidas', function(){
+        $productos = \App\Models\Producto::activos()->orderBy('nombre')->get();
+        $movimientos = \App\Models\SalidaInventario::with('producto')->latest()->limit(50)->get();
+
+        return view('almacen.salidas', compact('movimientos', 'productos'));
+    })->name('almacen.salidas');
     Route::post('/salidas', [\App\Http\Controllers\SalidasController::class, 'store'])->name('almacen.salidas.store');
 });
 

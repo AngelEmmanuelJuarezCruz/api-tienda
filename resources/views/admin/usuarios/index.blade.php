@@ -36,12 +36,18 @@
                 </div>
                 <div>
                     <label class="form-label" for="rol">Rol</label>
-                    <select id="rol" name="rol" required>
-                        <option value="" disabled {{ old('rol') ? '' : 'selected' }}>Selecciona un rol</option>
-                        <option value="administrador" {{ old('rol') === 'administrador' ? 'selected' : '' }}>Administrador</option>
-                        <option value="encargado" {{ old('rol') === 'encargado' ? 'selected' : '' }}>Encargado</option>
-                        <option value="cajero" {{ old('rol') === 'cajero' ? 'selected' : '' }}>Cajero</option>
-                    </select>
+                    <div class="grid grid-cols-1 gap-2" role="radiogroup" aria-label="Rol del usuario">
+                        @foreach([
+                            'administrador' => 'Administrador',
+                            'encargado' => 'Encargado',
+                            'cajero' => 'Cajero',
+                        ] as $value => $label)
+                            <label class="role-option">
+                                <input type="radio" name="rol" value="{{ $value }}" class="sr-only" required {{ old('rol') === $value ? 'checked' : '' }}>
+                                <span>{{ $label }}</span>
+                            </label>
+                        @endforeach
+                    </div>
                 </div>
                 <div>
                     <label class="form-label" for="password">Contrasena temporal</label>
@@ -100,4 +106,32 @@
         </div>
     </div>
 </div>
+<style>
+.role-option {
+    display: flex;
+    align-items: center;
+    min-height: 42px;
+    border: 1px solid rgba(15, 23, 42, 0.14);
+    border-radius: 12px;
+    background: #fff;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    cursor: pointer;
+    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+}
+
+.role-option:hover {
+    border-color: rgba(30, 58, 138, 0.35);
+    background: rgba(30, 58, 138, 0.04);
+}
+
+.role-option:has(input:checked) {
+    border-color: #1E3A8A;
+    background: #1E3A8A;
+    color: #fff;
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.14);
+}
+</style>
 @endsection

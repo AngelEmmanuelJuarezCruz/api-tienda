@@ -38,7 +38,7 @@
                     <label class="block text-sm font-bold text-gray-700 mb-2">Producto <span class="text-red-500">*</span></label>
                     <select name="producto_id" required class="w-full rounded-xl border border-gray-300 p-3.5 bg-white focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] font-medium transition-all shadow-sm">
                         <option value="">Selecciona un producto...</option>
-                        @foreach(App\Models\Producto::orderBy('nombre')->get() as $p)
+                        @foreach($productos as $p)
                             <option value="{{ $p->id }}">{{ $p->nombre }}</option>
                         @endforeach
                     </select>
@@ -53,7 +53,7 @@
                     <label class="block text-sm font-bold text-gray-700 mb-2">Proveedor <span class="text-red-500">*</span></label>
                     <select name="proveedor_id" required class="w-full rounded-xl border border-gray-300 p-3.5 bg-white focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] font-medium transition-all shadow-sm">
                         <option value="">Selecciona un proveedor...</option>
-                        @foreach(App\Models\Proveedor::orderBy('nombre')->get() as $prov)
+                        @foreach($proveedores as $prov)
                             <option value="{{ $prov->id }}">{{ $prov->nombre }}</option>
                         @endforeach
                     </select>
@@ -80,12 +80,12 @@
 
                 <!-- Costo -->
                 <div class="form-group relative">
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Costo Total / Factura <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Costo Unitario <span class="text-red-500">*</span></label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-500 font-bold">
                             $
                         </div>
-                        <input type="number" step="0.01" min="0" name="costo_adquisicion" required class="w-full pl-9 pr-4 py-3.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] font-medium transition-all shadow-sm" placeholder="Ej. 1500.00">
+                        <input type="number" step="0.01" min="0" name="costo_adquisicion" required class="w-full pl-9 pr-4 py-3.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] font-medium transition-all shadow-sm" placeholder="Ej. 150.50">
                     </div>
                     <div class="error-msg hidden mt-2 text-sm text-red-500 font-medium flex items-center gap-1">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -118,7 +118,7 @@
                         <th class="px-6 py-4 text-left">Producto</th>
                         <th class="px-6 py-4 text-left">Proveedor</th>
                         <th class="px-6 py-4 text-center">Cantidad</th>
-                        <th class="px-6 py-4 text-right">Costo Total</th>
+                        <th class="px-6 py-4 text-right">Costo Unitario</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-100">

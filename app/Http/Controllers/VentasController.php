@@ -59,18 +59,40 @@ class VentasController extends Controller
      */
     public function search(Request $request)
     {
-        $query = $request->get('q', '');
-        
-        $productos = Producto::where('activo', true)
-            ->where(function ($q) use ($query) {
-                $q->where('nombre', 'like', "%{$query}%")
-                  ->orWhere('sku', 'like', "%{$query}%")
-                  ->orWhereHas('categoria', function($qCat) use ($query) {
-                      $qCat->where('nombre', 'like', "%{$query}%");
-                  });
+        $query = trim((string) $request->get('q', ''));
+
+        if (mb_strlen($query) < 2) {
+            return response()->json([]);
+        }
+
+        $normalized = mb_strtolower($query);
+        $like = '%' . $normalized . '%';
+        $prefix = $normalized . '%';
+
+        $productos = Producto::query()
+            ->where('activo', true)
+            ->with('categoria:id,nombre')
+            ->select(['id', 'nombre', 'sku', 'precio_venta', 'stock_actual', 'categoria_id'])
+            ->where(function ($builder) use ($normalized, $like, $prefix) {
+                $builder
+                    ->whereRaw('LOWER(sku) = ?', [$normalized])
+                    ->orWhereRaw('LOWER(sku) LIKE ?', [$prefix])
+                    ->orWhereRaw('LOWER(nombre) LIKE ?', [$like])
+                    ->orWhereRaw('LOWER(nombre) LIKE ?', [$prefix])
+                    ->orWhereHas('categoria', function ($categoriaQuery) use ($like, $prefix) {
+                        $categoriaQuery
+                            ->whereRaw('LOWER(nombre) LIKE ?', [$like])
+                            ->orWhereRaw('LOWER(nombre) LIKE ?', [$prefix]);
+                    });
             })
-            ->with('categoria')
-            ->limit(20)
+            ->orderByRaw('CASE WHEN LOWER(sku) = ? THEN 0 WHEN LOWER(sku) LIKE ? THEN 1 WHEN LOWER(nombre) LIKE ? THEN 2 WHEN LOWER(nombre) LIKE ? THEN 3 ELSE 4 END', [
+                $normalized,
+                $prefix,
+                $prefix,
+                $like,
+            ])
+            ->orderByDesc('stock_actual')
+            ->limit(10)
             ->get()
             ->map(function ($p) {
                 return [
@@ -102,7 +124,7 @@ class VentasController extends Controller
             // 1. Transaccionalidad garantizada con DB::transaction
             return DB::transaction(function () use ($request) {
                 $user = Auth::user();
-                $esAdministrador = $user->rol === 'administrador'; // Regla estricta
+                $esAdministrador = in_array($user->rol, ['dueno', 'administrador'], true); // Roles con permiso administrativo
 
                 // Validar turno abierto
                 $turnoActual = \App\Models\TurnoCaja::where('usuario_id', $user->id)

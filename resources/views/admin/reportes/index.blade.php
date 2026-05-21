@@ -5,15 +5,55 @@
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" style="font-family: 'Poppins', sans-serif;">
 
-    <div class="flex items-center justify-between mb-8">
+    <div class="flex flex-col gap-5 mb-8 xl:flex-row xl:items-end xl:justify-between">
         <div>
             <h1 class="text-3xl font-bold text-gray-800 tracking-tight">Auditoría y Reportes</h1>
             <p class="text-gray-500 mt-1">Supervisión de Ventas y Cortes de Caja</p>
         </div>
-        <button class="inline-flex items-center gap-2 bg-[#1E3A8A] hover:bg-blue-800 text-white px-5 py-2.5 rounded-lg shadow-md transition-colors font-medium">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-            Exportar PDF
-        </button>
+        <form id="exportReportForm" action="{{ route('admin.reportes.export') }}" method="GET" class="bg-white border border-gray-100 shadow-sm rounded-xl p-4 w-full xl:max-w-4xl">
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-5">
+                <div>
+                    <label for="tipo" class="block text-xs font-bold uppercase text-slate-500 mb-1">Reporte</label>
+                    <select id="tipo" name="tipo" class="h-11 rounded-lg" required>
+                        <option value="ventas">Ventas</option>
+                        <option value="entradas">Entradas</option>
+                        <option value="salidas">Salidas</option>
+                        <option value="inventario">Inventario</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="formato" class="block text-xs font-bold uppercase text-slate-500 mb-1">Formato</label>
+                    <select id="formato" name="formato" class="h-11 rounded-lg" required>
+                        <option value="pdf">PDF</option>
+                        <option value="excel">Excel</option>
+                        <option value="zip">ZIP completo</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="desde" class="block text-xs font-bold uppercase text-slate-500 mb-1">Desde</label>
+                    <input id="desde" name="desde" type="date" value="{{ now()->subMonth()->toDateString() }}" class="h-11 rounded-lg">
+                </div>
+                <div>
+                    <label for="hasta" class="block text-xs font-bold uppercase text-slate-500 mb-1">Hasta</label>
+                    <input id="hasta" name="hasta" type="date" value="{{ now()->toDateString() }}" class="h-11 rounded-lg">
+                </div>
+                <div class="flex items-end">
+                    <button id="exportReportButton" type="submit" class="inline-flex h-11 w-full items-center justify-center gap-2 bg-[#1E3A8A] hover:bg-blue-800 text-white px-4 rounded-lg shadow-md transition-colors font-medium">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <span id="exportButtonText">Descargar</span>
+                    </button>
+                </div>
+            </div>
+            <div id="exportProgress" class="hidden mt-4">
+                <div class="flex items-center justify-between text-xs font-semibold text-slate-500 mb-2">
+                    <span>Generando archivo</span>
+                    <span>Espera un momento</span>
+                </div>
+                <div class="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+                    <div class="export-progress-bar h-full w-1/3 rounded-full bg-[#1E3A8A]"></div>
+                </div>
+            </div>
+        </form>
     </div>
 
     @if(session('success'))
@@ -181,180 +221,30 @@
         </div>
     </div>
 
-            <div class="overflow-x-auto">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Folio</th>
-                            <th>Fecha</th>
-                            <th>Usuario</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($rows as $row)
-                            <tr>
-                                <td>{{ $row->folio }}</td>
-                                <td>{{ $row->fecha?->format('Y-m-d H:i') }}</td>
-                                <td>{{ $row->usuario?->name ?? 'Sin usuario' }}</td>
-                                <td>${{ number_format((float) $row->total, 2) }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="text-center muted">Sin resultados</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        @elseif ($tipo === 'entradas')
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div>
-                    <div class="text-xs muted">Registros</div>
-                    <div class="text-2xl font-semibold">{{ $resumen['total_registros'] }}</div>
-                </div>
-                <div>
-                    <div class="text-xs muted">Cantidad total</div>
-                    <div class="text-2xl font-semibold">{{ $resumen['total_cantidad'] }}</div>
-                </div>
-                <div>
-                    <div class="text-xs muted">Costo total</div>
-                    <div class="text-2xl font-semibold">${{ number_format($resumen['total_costo'], 2) }}</div>
-                </div>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Producto</th>
-                            <th>Proveedor</th>
-                            <th>Usuario</th>
-                            <th>Cantidad</th>
-                            <th>Costo unitario</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($rows as $row)
-                            <tr>
-                                <td>{{ $row->fecha?->format('Y-m-d H:i') }}</td>
-                                <td>{{ $row->producto?->nombre ?? 'Sin producto' }}</td>
-                                <td>{{ $row->proveedor?->nombre ?? 'Sin proveedor' }}</td>
-                                <td>{{ $row->usuario?->name ?? 'Sin usuario' }}</td>
-                                <td>{{ $row->cantidad }}</td>
-                                <td>${{ number_format((float) $row->costo_unitario, 2) }}</td>
-                                <td>${{ number_format((float) ($row->cantidad * $row->costo_unitario), 2) }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="7" class="text-center muted">Sin resultados</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        @elseif ($tipo === 'salidas')
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div>
-                    <div class="text-xs muted">Registros</div>
-                    <div class="text-2xl font-semibold">{{ $resumen['total_registros'] }}</div>
-                </div>
-                <div>
-                    <div class="text-xs muted">Cantidad total</div>
-                    <div class="text-2xl font-semibold">{{ $resumen['total_cantidad'] }}</div>
-                </div>
-                <div>
-                    <div class="text-xs muted">Motivos</div>
-                    <div class="flex flex-wrap gap-2 mt-2">
-                        @foreach ($resumen['motivos'] as $motivo => $count)
-                            <span class="badge">{{ $motivo }} ({{ $count }})</span>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Producto</th>
-                            <th>Usuario</th>
-                            <th>Cantidad</th>
-                            <th>Motivo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($rows as $row)
-                            <tr>
-                                <td>{{ $row->fecha?->format('Y-m-d H:i') }}</td>
-                                <td>{{ $row->producto?->nombre ?? 'Sin producto' }}</td>
-                                <td>{{ $row->usuario?->name ?? 'Sin usuario' }}</td>
-                                <td>{{ $row->cantidad }}</td>
-                                <td>{{ $row->motivo }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="text-center muted">Sin resultados</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        @else
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div>
-                    <div class="text-xs muted">Productos</div>
-                    <div class="text-2xl font-semibold">{{ $resumen['total_productos'] }}</div>
-                </div>
-                <div>
-                    <div class="text-xs muted">Stock total</div>
-                    <div class="text-2xl font-semibold">{{ $resumen['total_stock'] }}</div>
-                </div>
-                <div>
-                    <div class="text-xs muted">Valor total</div>
-                    <div class="text-2xl font-semibold">${{ number_format($resumen['total_valor'], 2) }}</div>
-                </div>
-                <div>
-                    <div class="text-xs muted">Bajo stock</div>
-                    <div class="text-2xl font-semibold">{{ $resumen['bajo_stock'] }}</div>
-                </div>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Producto</th>
-                            <th>Categoria</th>
-                            <th>SKU</th>
-                            <th>Precio compra</th>
-                            <th>Precio venta</th>
-                            <th>Stock</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($rows as $row)
-                            <tr>
-                                <td>{{ $row->nombre }}</td>
-                                <td>{{ $row->categoria?->nombre ?? 'Sin categoria' }}</td>
-                                <td>{{ $row->sku ?? $row->codigo_barras }}</td>
-                                <td>${{ number_format((float) $row->precio_compra, 2) }}</td>
-                                <td>${{ number_format((float) $row->precio_venta, 2) }}</td>
-                                <td>{{ $row->stock_actual }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="6" class="text-center muted">Sin resultados</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        @endif
-    </div>
 </div>
 
 <script>
+const exportForm = document.getElementById('exportReportForm');
+if (exportForm) {
+    exportForm.addEventListener('submit', () => {
+        const button = document.getElementById('exportReportButton');
+        const buttonText = document.getElementById('exportButtonText');
+        const progress = document.getElementById('exportProgress');
+
+        button.disabled = true;
+        button.classList.add('opacity-70', 'cursor-not-allowed');
+        buttonText.textContent = 'Generando...';
+        progress.classList.remove('hidden');
+
+        setTimeout(() => {
+            button.disabled = false;
+            button.classList.remove('opacity-70', 'cursor-not-allowed');
+            buttonText.textContent = 'Descargar';
+            progress.classList.add('hidden');
+        }, 12000);
+    });
+}
+
 function auditarCorte(id, gastosActuales, realActual) {
     Swal.fire({
         title: 'Auditar Corte de Caja',
@@ -387,4 +277,13 @@ function auditarCorte(id, gastosActuales, realActual) {
     });
 }
 </script>
+<style>
+@keyframes export-progress {
+    0% { transform: translateX(-120%); }
+    100% { transform: translateX(320%); }
+}
+.export-progress-bar {
+    animation: export-progress 1.2s ease-in-out infinite;
+}
+</style>
 @endsection

@@ -38,7 +38,7 @@
                     <label class="block text-sm font-bold text-gray-700 mb-2">Producto <span class="text-red-500">*</span></label>
                     <select name="producto_id" required class="w-full rounded-xl border border-gray-300 p-3.5 bg-white focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] font-medium transition-all shadow-sm">
                         <option value="">Selecciona un producto...</option>
-                        @foreach(App\Models\Producto::orderBy('nombre')->get() as $p)
+                        @foreach($productos as $p)
                             <option value="{{ $p->id }}">{{ $p->nombre }} (Stock: {{ $p->stock_actual }})</option>
                         @endforeach
                     </select>
@@ -75,8 +75,12 @@
 
                 <!-- Justificación -->
                 <div class="form-group relative md:col-span-2">
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Justificación (Detalles)</label>
-                    <textarea name="justificacion" rows="3" class="w-full rounded-xl border border-gray-300 p-3.5 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] font-medium transition-all shadow-sm" placeholder="Añade detalles adicionales si es necesario..."></textarea>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Justificación (Detalles) <span class="text-red-500">*</span></label>
+                    <textarea name="justificacion" rows="3" required class="w-full rounded-xl border border-gray-300 p-3.5 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] font-medium transition-all shadow-sm" placeholder="Añade detalles de la salida o merma..."></textarea>
+                    <div class="error-msg hidden mt-2 text-sm text-red-500 font-medium flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span>La justificación es obligatoria</span>
+                    </div>
                 </div>
             </div>
 

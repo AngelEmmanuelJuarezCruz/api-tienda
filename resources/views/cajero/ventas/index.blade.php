@@ -168,13 +168,12 @@ posSearch.addEventListener('input', async (e) => {
     }
 
     try {
-        const response = await fetch('/cajero/ventas/search', {
-            method: 'POST',
+        const response = await fetch(`/pos/buscar-productos?q=${encodeURIComponent(query)}`, {
+            method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
-            },
-            body: JSON.stringify({ q: query })
+            }
         });
 
         const productos = await response.json();
@@ -376,7 +375,7 @@ btnConfirmarPago.addEventListener('click', async () => {
     }));
 
     try {
-        const response = await fetch('/cajero/ventas/store', {
+        const response = await fetch('/pos/cobrar', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
