@@ -18,7 +18,25 @@ class AlmacenController extends Controller
     public function create()
     {
         $categorias = Categoria::all();
-        return view('admin.almacen.create', compact('categorias'));
+        $proveedores = Proveedor::all();
+        return view('admin.almacen.create', compact('categorias', 'proveedores'));
+    }
+
+    public function show(string $id)
+    {
+        $producto = Producto::with(['bitacoraMovimientosStock' => function($query) {
+            $query->orderBy('fecha_movimiento', 'desc');
+        }])->findOrFail($id);
+        
+        return view('admin.almacen.show', compact('producto'));
+    }
+
+    public function edit(string $id)
+    {
+        $producto = Producto::findOrFail($id);
+        $categorias = Categoria::all();
+        $proveedores = Proveedor::all();
+        return view('admin.almacen.edit', compact('producto', 'categorias', 'proveedores'));
     }
 
     public function store(Request $request)
@@ -26,37 +44,26 @@ class AlmacenController extends Controller
         // Validación estricta: usar solo las columnas del modelo solicitadas
         $validated = $request->validate([
             'categoria_id' => 'required|exists:categorias,id',
+            'proveedor_id' => 'required|exists:proveedores,id',
             'nombre' => 'required|string|max:160|unique:productos,nombre',
             'sku' => 'required|string|max:100|unique:productos,sku',
             'precio_venta' => 'required|numeric|min:0',
             'stock_actual' => 'required|integer|min:0',
-            'imagen' => 'nullable|image|max:4096',
+            'fecha_caducidad' => 'nullable|date',
         ]);
 
         try {
             DB::beginTransaction();
 
-            // Guardar únicamente las columnas solicitadas
-            // Asegurar un proveedor válido: usar proveedor enviado o el primer proveedor existente;
-            // si no existe ninguno, crear uno por defecto para evitar fallo NOT NULL.
-            $firstProveedor = Proveedor::first();
-            if (!$firstProveedor) {
-                $firstProveedor = Proveedor::create(['nombre' => 'Proveedor por defecto']);
-            }
-
-            $imagenPath = null;
-            if ($request->hasFile('imagen')) {
-                $imagenPath = $request->file('imagen')->store('productos', 'public');
-            }
-
             $producto = Producto::create([
                 'categoria_id' => $validated['categoria_id'],
-                'proveedor_id' => $firstProveedor->id,
+                'proveedor_id' => $validated['proveedor_id'],
                 'nombre' => $validated['nombre'],
                 'sku' => $validated['sku'],
                 'precio_venta' => $validated['precio_venta'],
                 'stock_actual' => $validated['stock_actual'],
-                'imagen_path' => $imagenPath,
+                'fecha_caducidad' => $validated['fecha_caducidad'] ?? null,
+                'tiene_caducidad' => isset($validated['fecha_caducidad']),
             ]);
 
             // Crear lote básico si hay stock
@@ -64,7 +71,7 @@ class AlmacenController extends Controller
                 LoteProducto::create([
                     'producto_id' => $producto->id,
                     'numero_lote' => 'LOTE-' . date('Ymd') . '-' . $producto->id,
-                    'fecha_caducidad' => null,
+                    'fecha_caducidad' => $validated['fecha_caducidad'] ?? null,
                     'cantidad_inicial' => $producto->stock_actual,
                     'cantidad_actual' => $producto->stock_actual,
                 ]);
@@ -122,7 +129,7 @@ class AlmacenController extends Controller
                 'precio_venta' => $validated['precio'],
                 'tiene_caducidad' => $validated['tiene_caducidad'] ?? false,
                 'stock_actual' => $validated['stock'],
-                'imagen_path' => $imagenPath,
+                'fecha_caducidad' => $validated['fecha_caducidad'] ?? null,
             ]);
 
             if ($producto->tiene_caducidad && isset($validated['fecha_caducidad'])) {

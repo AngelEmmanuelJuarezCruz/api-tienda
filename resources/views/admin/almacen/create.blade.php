@@ -82,6 +82,25 @@
                 @error('categoria_id') <p class="text-xs text-red-600 font-semibold mt-2">{{ $message }}</p> @enderror
             </div>
 
+            {{-- Input: Proveedor --}}
+            <div class="form-group">
+                <label class="block text-sm font-bold text-gray-700 mb-2">Proveedor <span class="text-red-500">*</span></label>
+                <div class="relative">
+                    <select name="proveedor_id" data-required="true"
+                            class="w-full rounded-xl border {{ $errors->has('proveedor_id') ? 'border-red-400 bg-red-50 ring-2 ring-red-100' : 'border-gray-300' }} p-3.5 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-800 bg-white">
+                        <option value="">Seleccione un proveedor</option>
+                        @foreach($proveedores ?? [] as $prov)
+                            <option value="{{ $prov->id }}" {{ old('proveedor_id') == $prov->id ? 'selected' : '' }}>{{ $prov->nombre }}</option>
+                        @endforeach
+                    </select>
+                    <div class="absolute right-4 top-4 text-gray-400 pointer-events-none">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                </div>
+                <p class="error-text text-xs text-red-500 font-semibold mt-2 hidden">Debes seleccionar un proveedor.</p>
+                @error('proveedor_id') <p class="text-xs text-red-600 font-semibold mt-2">{{ $message }}</p> @enderror
+            </div>
+
             {{-- Input: Precio Venta --}}
             <div class="form-group">
                 <label class="block text-sm font-bold text-gray-700 mb-2">Precio de Venta <span class="text-red-500">*</span></label>
@@ -96,6 +115,16 @@
                 </div>
                 <p class="error-text text-xs text-red-500 font-semibold mt-2 hidden">Ingresa un precio válido mayor a 0.</p>
                 @error('precio_venta') <p class="text-xs text-red-600 font-semibold mt-2">{{ $message }}</p> @enderror
+            </div>
+
+            {{-- Input: Fecha de Caducidad --}}
+            <div class="form-group">
+                <label class="block text-sm font-bold text-gray-700 mb-2">Fecha de Caducidad <span class="text-gray-400 font-normal text-xs">(Opcional)</span></label>
+                <div class="relative">
+                    <input type="date" name="fecha_caducidad" value="{{ old('fecha_caducidad') }}"
+                           class="w-full rounded-xl border {{ $errors->has('fecha_caducidad') ? 'border-red-400 bg-red-50 ring-2 ring-red-100' : 'border-gray-300' }} p-3.5 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-800">
+                </div>
+                @error('fecha_caducidad') <p class="text-xs text-red-600 font-semibold mt-2">{{ $message }}</p> @enderror
             </div>
 
             {{-- Input: Stock --}}
