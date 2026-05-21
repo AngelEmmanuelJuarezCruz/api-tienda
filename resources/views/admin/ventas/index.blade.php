@@ -3,7 +3,7 @@
 @section('title', 'Ventas')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" style="background:#F2F4F7; font-family: 'Poppins', sans-serif;">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
         <h1 class="text-2xl font-semibold text-gray-800">Punto de Venta - Administrador</h1>
@@ -79,7 +79,7 @@
                         Procesar Cobro
                     </button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>

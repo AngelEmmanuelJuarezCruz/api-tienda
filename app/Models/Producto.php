@@ -4,12 +4,17 @@ namespace App\Models;
 
 use Database\Factories\ProductoFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
 
 class Producto extends Model
 {
     /** @use HasFactory<ProductoFactory> */
     use HasFactory;
+
+    protected $appends = [
+        'imagen_url',
+    ];
 
     protected $table = 'productos';
 
@@ -20,6 +25,8 @@ class Producto extends Model
         'sku',
         'codigo_barras',
         'unidad_medida',
+        'fecha_caducidad',
+        'imagen_path',
         'descripcion',
         'precio_compra',
         'precio_venta',
@@ -35,10 +42,20 @@ class Producto extends Model
         return [
             'precio_compra' => 'decimal:2',
             'precio_venta' => 'decimal:2',
+            'fecha_caducidad' => 'date',
             'tiene_caducidad' => 'boolean',
             'activo' => 'boolean',
             'fecha_caducidad' => 'date',
         ];
+    }
+
+    public function getImagenUrlAttribute(): ?string
+    {
+        if (! $this->imagen_path) {
+            return null;
+        }
+
+        return Storage::disk('public')->url($this->imagen_path);
     }
 
     public function categoria()

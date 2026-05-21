@@ -181,6 +181,177 @@
         </div>
     </div>
 
+            <div class="overflow-x-auto">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Folio</th>
+                            <th>Fecha</th>
+                            <th>Usuario</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($rows as $row)
+                            <tr>
+                                <td>{{ $row->folio }}</td>
+                                <td>{{ $row->fecha?->format('Y-m-d H:i') }}</td>
+                                <td>{{ $row->usuario?->name ?? 'Sin usuario' }}</td>
+                                <td>${{ number_format((float) $row->total, 2) }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="text-center muted">Sin resultados</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        @elseif ($tipo === 'entradas')
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div>
+                    <div class="text-xs muted">Registros</div>
+                    <div class="text-2xl font-semibold">{{ $resumen['total_registros'] }}</div>
+                </div>
+                <div>
+                    <div class="text-xs muted">Cantidad total</div>
+                    <div class="text-2xl font-semibold">{{ $resumen['total_cantidad'] }}</div>
+                </div>
+                <div>
+                    <div class="text-xs muted">Costo total</div>
+                    <div class="text-2xl font-semibold">${{ number_format($resumen['total_costo'], 2) }}</div>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Producto</th>
+                            <th>Proveedor</th>
+                            <th>Usuario</th>
+                            <th>Cantidad</th>
+                            <th>Costo unitario</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($rows as $row)
+                            <tr>
+                                <td>{{ $row->fecha?->format('Y-m-d H:i') }}</td>
+                                <td>{{ $row->producto?->nombre ?? 'Sin producto' }}</td>
+                                <td>{{ $row->proveedor?->nombre ?? 'Sin proveedor' }}</td>
+                                <td>{{ $row->usuario?->name ?? 'Sin usuario' }}</td>
+                                <td>{{ $row->cantidad }}</td>
+                                <td>${{ number_format((float) $row->costo_unitario, 2) }}</td>
+                                <td>${{ number_format((float) ($row->cantidad * $row->costo_unitario), 2) }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7" class="text-center muted">Sin resultados</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        @elseif ($tipo === 'salidas')
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div>
+                    <div class="text-xs muted">Registros</div>
+                    <div class="text-2xl font-semibold">{{ $resumen['total_registros'] }}</div>
+                </div>
+                <div>
+                    <div class="text-xs muted">Cantidad total</div>
+                    <div class="text-2xl font-semibold">{{ $resumen['total_cantidad'] }}</div>
+                </div>
+                <div>
+                    <div class="text-xs muted">Motivos</div>
+                    <div class="flex flex-wrap gap-2 mt-2">
+                        @foreach ($resumen['motivos'] as $motivo => $count)
+                            <span class="badge">{{ $motivo }} ({{ $count }})</span>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Producto</th>
+                            <th>Usuario</th>
+                            <th>Cantidad</th>
+                            <th>Motivo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($rows as $row)
+                            <tr>
+                                <td>{{ $row->fecha?->format('Y-m-d H:i') }}</td>
+                                <td>{{ $row->producto?->nombre ?? 'Sin producto' }}</td>
+                                <td>{{ $row->usuario?->name ?? 'Sin usuario' }}</td>
+                                <td>{{ $row->cantidad }}</td>
+                                <td>{{ $row->motivo }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center muted">Sin resultados</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div>
+                    <div class="text-xs muted">Productos</div>
+                    <div class="text-2xl font-semibold">{{ $resumen['total_productos'] }}</div>
+                </div>
+                <div>
+                    <div class="text-xs muted">Stock total</div>
+                    <div class="text-2xl font-semibold">{{ $resumen['total_stock'] }}</div>
+                </div>
+                <div>
+                    <div class="text-xs muted">Valor total</div>
+                    <div class="text-2xl font-semibold">${{ number_format($resumen['total_valor'], 2) }}</div>
+                </div>
+                <div>
+                    <div class="text-xs muted">Bajo stock</div>
+                    <div class="text-2xl font-semibold">{{ $resumen['bajo_stock'] }}</div>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Categoria</th>
+                            <th>SKU</th>
+                            <th>Precio compra</th>
+                            <th>Precio venta</th>
+                            <th>Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($rows as $row)
+                            <tr>
+                                <td>{{ $row->nombre }}</td>
+                                <td>{{ $row->categoria?->nombre ?? 'Sin categoria' }}</td>
+                                <td>{{ $row->sku ?? $row->codigo_barras }}</td>
+                                <td>${{ number_format((float) $row->precio_compra, 2) }}</td>
+                                <td>${{ number_format((float) $row->precio_venta, 2) }}</td>
+                                <td>{{ $row->stock_actual }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center muted">Sin resultados</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        @endif
+    </div>
 </div>
 
 <script>

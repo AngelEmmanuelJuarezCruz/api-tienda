@@ -16,6 +16,8 @@ class ProductoFactory extends Factory
 
     public function definition(): array
     {
+        $tieneCaducidad = fake()->boolean();
+
         return [
             'categoria_id' => Categoria::factory(),
             'proveedor_id' => Proveedor::factory(),
@@ -26,7 +28,9 @@ class ProductoFactory extends Factory
             'precio_venta' => fake()->randomFloat(2, 6, 150),
             'stock_actual' => fake()->numberBetween(0, 100),
             'stock_minimo' => fake()->numberBetween(0, 20),
-            'tiene_caducidad' => fake()->boolean(),
+            'tiene_caducidad' => $tieneCaducidad,
+            'fecha_caducidad' => $tieneCaducidad ? fake()->dateTimeBetween('now', '+1 year') : null,
+            'imagen_path' => null,
             'activo' => true,
         ];
     }

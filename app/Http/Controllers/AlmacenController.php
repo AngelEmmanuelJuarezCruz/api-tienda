@@ -8,6 +8,7 @@ use App\Models\Categoria;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AlmacenController extends Controller
 {
@@ -103,10 +104,20 @@ class AlmacenController extends Controller
             'unidad_medida' => 'nullable|in:pieza,caja,kilo,metro',
             'tiene_caducidad' => 'boolean',
             'fecha_caducidad' => 'nullable|date|required_if:tiene_caducidad,true',
+            'imagen' => 'nullable|image|max:4096',
         ]);
 
         try {
             DB::beginTransaction();
+
+            $imagenPath = $producto->imagen_path;
+            if ($request->hasFile('imagen')) {
+                if ($producto->imagen_path) {
+                    Storage::disk('public')->delete($producto->imagen_path);
+                }
+
+                $imagenPath = $request->file('imagen')->store('productos', 'public');
+            }
 
             $producto->update([
                 'categoria_id' => $validated['categoria_id'] ?? $producto->categoria_id,

@@ -3,7 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Exports\Reportes\EntradasExport;
+use App\Exports\Reportes\InventarioExport;
+use App\Exports\Reportes\SalidasExport;
+use App\Exports\Reportes\VentasExport;
+use App\Models\DetalleVenta;
+use App\Models\EntradaInventario;
+use App\Models\Producto;
+use App\Models\SalidaInventario;
+use App\Models\Venta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReportesController extends Controller
 {
